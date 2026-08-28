@@ -1,0 +1,19 @@
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
+import 'package:mobile/app/config/app_config.dart';
+import 'package:mobile/app/di/injection.config.dart';
+
+final GetIt getIt = GetIt.instance;
+
+@InjectableInit(
+  initializerName: 'init',
+  preferRelativeImports: true,
+  asExtension: true,
+)
+Future<void> configureDependencies(AppConfig config) async {
+  if (getIt.isRegistered<AppConfig>()) {
+    await getIt.reset();
+  }
+  getIt.registerSingleton<AppConfig>(config);
+  getIt.init(environment: config.environment.name);
+}

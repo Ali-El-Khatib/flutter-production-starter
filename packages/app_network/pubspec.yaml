@@ -1,0 +1,22 @@
+name: app_network
+description: "Centralized Dio networking infrastructure, interceptors, and error mapping."
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  app_core:
+    path: ../app_core
+  dio: ^5.11.0
+  logger: ^2.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  app_lints:
+    path: ../app_lints

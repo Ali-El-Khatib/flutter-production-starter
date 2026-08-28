@@ -1,0 +1,18 @@
+name: design_system
+description: "Generic reusable visual primitives, theme, tokens, and components."
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  app_lints:
+    path: ../app_lints
