@@ -79,7 +79,8 @@ coverage/
 # Symbols
 app.*.symbols
 
-# Agents
+# Agents & Local drafts
 .agents/
 AGENTS.md
 phases_plan.md
+post_reddit.md
