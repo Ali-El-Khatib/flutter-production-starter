@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation**: Updated `README.md` and `ARCHITECTURE.md` to document the Pub Workspaces + Melos hybrid model and LEGO feature replaceability.
 
 ### 📦 Commits
+- [`f2f9022`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/f2f9022) — `docs: align CONTRIBUTING and CI workflow with Dart 3.6+ Pub Workspace standards`
+- [`ce8cdf9`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/ce8cdf9) — `ci: resolve Pub Workspace natively with flutter pub get`
+- [`a9f893b`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/a9f893b) — `docs: add LEGO feature replaceability guide and contract substitutability tests`
+- [`b89f2d4`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/b89f2d4) — `docs: add CHANGELOG.md to repository tree in README.md`
 - [`507a814`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/507a814) — `docs: add CHANGELOG.md with release history and commit references`
 - [`21b5449`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/21b5449) — `feat: migrate monorepo to Dart 3.6+ Pub Workspaces + Melos hybrid`
 - [`fa7845d`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/fa7845d) — `chore: remove residual desktop and web platform directories`
