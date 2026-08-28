@@ -16,22 +16,22 @@ Before contributing, please read [ARCHITECTURE.md](./ARCHITECTURE.md) and [AGENT
 
 ## 🛠️ Development Workflow
 
-### 1. Bootstrap
+### 1. Resolve Workspace Dependencies
 ```bash
-melos bootstrap
+flutter pub get
 ```
 
 ### 2. Code Generation (if using Injectable or Freezed)
 ```bash
-melos run generate
+dart run melos run generate
 ```
 
 ### 3. Verification Gates
 Before submitting a PR, ensure all checks pass:
 ```bash
-melos run format:check
-melos run analyze
-melos run test
+dart run melos run format:check
+dart run melos run analyze
+dart run melos run test
 ```
 
 ---

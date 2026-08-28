@@ -30,7 +30,6 @@ migrate_working_dir/
 .pub/
 /build/
 **/build/
-# pubspec.lock
 **/pubspec_overrides.yaml
 
 # Android related
@@ -82,6 +81,11 @@ app.*.symbols
 # Agents & Local drafts
 .agents/
 AGENTS.md
-
-
-
+phases_plan.md
+post_reddit.md
+post_devto.md
+BuiltInSUggestion
+hybrid_monorepo_plan.md
+stage2_plan.md
+plan(1).md
+plan.md

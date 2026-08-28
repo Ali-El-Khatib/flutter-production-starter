@@ -24,14 +24,11 @@ jobs:
       - name: Resolve Workspace Dependencies
         run: flutter pub get
 
-      - name: Install Melos
-        run: dart pub global activate melos
-
       - name: Check Code Formatting
-        run: melos run format:check
+        run: dart run melos run format:check
 
       - name: Analyze Workspace
-        run: melos run analyze
+        run: dart run melos run analyze
 
       - name: Run Tests
-        run: melos run test
+        run: dart run melos run test
