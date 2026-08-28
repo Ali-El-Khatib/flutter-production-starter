@@ -49,10 +49,6 @@ A scalable, production-oriented Flutter starter repository and architecture temp
 
 ### 1. Prerequisites
 - Dart SDK `^3.6.0` / Flutter SDK `^3.27.0` (or higher)
-- Melos CLI:
-```bash
-dart pub global activate melos
-```
 
 ### 2. Resolve Workspace Dependencies
 Pub Workspaces natively links all workspace members with a single shared lockfile:
@@ -64,38 +60,40 @@ flutter pub get
 Run in any configured environment (`development`, `staging`, `production`):
 ```bash
 # Development (default)
-melos run run:dev
+dart run melos run run:dev
 
 # Staging
-melos run run:staging
+dart run melos run run:staging
 
 # Production
-melos run run:prod
+dart run melos run run:prod
 
 # Directly on connected emulator
-melos run run:emulator
+dart run melos run run:emulator
 ```
 
 ---
 
 ## 📜 Monorepo Workspace Commands
 
+Melos is pinned as a root dev dependency (`^6.0.0`) and is executed via `dart run melos`:
+
 | Command | Action |
 |---|---|
-| `melos bootstrap` | Link all packages and resolve dependencies |
-| `melos run format` | Format Dart code across the monorepo |
-| `melos run format:check` | Verify code formatting in CI |
-| `melos run analyze` | Run `flutter analyze` across all 6 packages |
-| `melos run test` | Run all test suites across all packages |
-| `melos run generate` | Run `build_runner` code generation (`injectable`, `freezed`) |
-| `melos run clean` | Clean all Flutter build outputs |
-| `melos run run:dev` | Run mobile app in development mode |
-| `melos run run:staging` | Run mobile app in staging mode |
-| `melos run run:prod` | Run mobile app in production mode |
-| `melos run run:emulator` | Run mobile app directly on active emulator (`emulator-5554`) |
-| `melos run devices` | List all connected devices |
-| `melos run emulators` | List all available emulators |
-| `melos run emulators:launch` | Launch Pixel 7 emulator |
+| `flutter pub get` | Resolve workspace dependencies natively across all packages |
+| `dart run melos run format` | Format Dart code across the monorepo |
+| `dart run melos run format:check` | Verify code formatting in CI |
+| `dart run melos run analyze` | Run `flutter analyze` across all 6 packages |
+| `dart run melos run test` | Run all test suites across all packages |
+| `dart run melos run generate` | Run `build_runner` code generation (`injectable`, `freezed`) |
+| `dart run melos run clean` | Clean all Flutter build outputs |
+| `dart run melos run run:dev` | Run mobile app in development mode |
+| `dart run melos run run:staging` | Run mobile app in staging mode |
+| `dart run melos run run:prod` | Run mobile app in production mode |
+| `dart run melos run run:emulator` | Run mobile app directly on active emulator (`emulator-5554`) |
+| `dart run melos run devices` | List all connected devices |
+| `dart run melos run emulators` | List all available emulators |
+| `dart run melos run emulators:launch` | Launch Pixel 7 emulator |
 
 ---
 
@@ -113,11 +111,11 @@ melos run run:emulator
 Run the full verification suite across the entire repository:
 
 ```bash
-melos bootstrap
-melos run generate
-melos run format:check
-melos run analyze
-melos run test
+flutter pub get
+dart run melos run generate
+dart run melos run format:check
+dart run melos run analyze
+dart run melos run test
 ```
 
 ---
@@ -126,7 +124,7 @@ melos run test
 
 Contributions are welcome! Please ensure:
 1. All changes adhere to [ARCHITECTURE.md](./ARCHITECTURE.md) and [AGENTS.md](./AGENTS.md).
-2. All packages pass `melos run format:check`, `melos run analyze`, and `melos run test`.
+2. All packages pass `dart run melos run format:check`, `dart run melos run analyze`, and `dart run melos run test`.
 3. New features export their public API via a root barrel file.
 
 ---

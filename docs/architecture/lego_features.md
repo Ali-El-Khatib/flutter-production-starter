@@ -65,25 +65,25 @@ class AuthV2RepositoryImpl implements AuthRepository { ... }
 
 ### Step 3: Re-run Code Generation
 ```bash
-melos run generate
+dart run melos run generate
 ```
 
 ### Step 4: Validate the Application
 Run static analysis and the test suite:
 ```bash
-melos run analyze
-melos run test
+dart run melos run analyze
+dart run melos run test
 ```
 
 ### Step 5: Test the App
 Launch the app with the new brick active:
 ```bash
-melos run run:dev
+dart run melos run run:dev
 ```
 
 ### Step 6: Delete or Promote
 - If V2 is your new permanent authentication system: delete `apps/mobile/lib/features/auth/` and promote `auth_v2` to `auth`.
-- If you want to revert: re-enable `@LazySingleton(as: AuthRepository)` on `AuthRepositoryImpl` and run `melos run generate`.
+- If you want to revert: re-enable `@LazySingleton(as: AuthRepository)` on `AuthRepositoryImpl` and run `dart run melos run generate`.
 
 ---
 

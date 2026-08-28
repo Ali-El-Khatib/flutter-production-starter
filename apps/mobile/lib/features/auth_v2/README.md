@@ -36,11 +36,11 @@ To evaluate `auth_v2` in place of `auth`:
    ```
 3. Run code generation:
    ```bash
-   melos run generate
+   dart run melos run generate
    ```
 4. Verify the rest of the application (screens, route guards, use cases, BLoCs) runs without a single line changed:
    ```bash
-   melos run analyze
-   melos run test
-   melos run run:dev
+   dart run melos run analyze
+   dart run melos run test
+   dart run melos run run:dev
    ```
