@@ -11,7 +11,7 @@ A scalable, production-oriented Flutter starter repository and architecture temp
 
 ## 🚀 Architecture Highlights
 
-- **Monorepo Architecture**: Managed with [Melos](https://melos.invertase.dev/) for cross-package linking, testing, and script execution.
+- **Dart 3.6+ Pub Workspaces + Melos**: Native multi-package resolution with shared lockfile and zero `path:` overrides, combined with Melos task orchestration.
 - **Feature-First LEGO Modules**: Isolated business capabilities (`auth`, `profile`, `settings`, `home`) exposing intentional public APIs (`feature/feature.dart`).
 - **Pragmatic Clean Architecture**: Lightweight presentation where simple, structured data/domain contracts where complexity requires them.
 - **Declarative Routing**: Strongly-typed routing and route guards with [`kaisel: ^1.1.0`](https://pub.dev/packages/kaisel).
@@ -35,8 +35,8 @@ A scalable, production-oriented Flutter starter repository and architecture temp
 │   ├── app_storage/           # Storage contracts (SecureStorage, KeyValueStorage, MemoryCache)
 │   ├── design_system/         # Tokens, theme, buttons, text fields, loaders, error states
 │   └── app_lints/             # Shared strict analysis and linting configuration
-├── melos.yaml                 # Monorepo workspace configuration
-├── pubspec.yaml               # Root workspace pubspec
+├── melos.yaml                 # Monorepo task runner configuration
+├── pubspec.yaml               # Root Pub Workspace configuration
 ├── ARCHITECTURE.md            # In-depth architectural rules and conventions
 └── LICENSE                    # Open Source MIT License
 ```
@@ -46,16 +46,16 @@ A scalable, production-oriented Flutter starter repository and architecture temp
 ## 🛠️ Quick Start
 
 ### 1. Prerequisites
-- Flutter SDK `^3.14.0` or higher
+- Dart SDK `^3.6.0` / Flutter SDK `^3.27.0` (or higher)
 - Melos CLI:
 ```bash
 dart pub global activate melos
 ```
 
-### 2. Bootstrap Workspace
-Link and resolve all monorepo packages:
+### 2. Resolve Workspace Dependencies
+Pub Workspaces natively links all workspace members with a single shared lockfile:
 ```bash
-melos bootstrap
+flutter pub get
 ```
 
 ### 3. Run the Mobile App

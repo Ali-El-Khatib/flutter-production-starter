@@ -98,6 +98,28 @@ Dio / Storage / Platform Error
 
 ## 5. Dependency Injection
 
-- Powered by `GetIt` + `Injectable`.
-- Constructor injection is strictly preferred.
 - Environments (`development`, `staging`, `production`) configure infrastructure parameters cleanly.
+
+---
+
+## 6. Hybrid Monorepo: Pub Workspaces + Melos
+
+The monorepo employs a **Dart 3.6+ Pub Workspaces + Melos** hybrid model:
+
+```text
+                    HYBRID MONOREPO
+                           │
+              ┌────────────┴─────────────┐
+              │                          │
+         Pub Workspaces                Melos
+              │                          │
+     dependency resolution        command orchestration
+     native package linking       testing across packages
+     single shared lockfile       static analysis
+     zero path: overrides         code generation runner
+                                  environment execution & CI
+```
+
+- **Pub Workspaces** handles all package resolution and local linking natively without `path:` dependencies or overrides.
+- **Melos** acts as the automation and command orchestration engine for multi-package testing, analysis, formatting, and generation.
+

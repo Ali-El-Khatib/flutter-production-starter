@@ -4,10 +4,6 @@ packages:
   - apps/**
   - packages/**
 
-command:
-  bootstrap:
-    usePubspecOverrides: true
-
 scripts:
   format:
     run: dart format .

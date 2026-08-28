@@ -2,7 +2,15 @@ name: flutter_starter_workspace
 publish_to: 'none'
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.6.0 <4.0.0'
+
+workspace:
+  - apps/mobile
+  - packages/app_core
+  - packages/app_lints
+  - packages/app_network
+  - packages/app_storage
+  - packages/design_system
 
 dev_dependencies:
   melos: ^6.0.0

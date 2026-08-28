@@ -82,5 +82,6 @@ app.*.symbols
 # Agents & Local drafts
 .agents/
 AGENTS.md
-phases_plan.md
-post_reddit.md
+
+
+

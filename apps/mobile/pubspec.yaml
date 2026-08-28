@@ -4,23 +4,22 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.6.0 <4.0.0'
   flutter: ">=3.0.0"
+
+resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
+
   cupertino_icons: ^1.0.8
 
-  # Architecture Shared Packages
-  app_core:
-    path: ../../packages/app_core
-  app_network:
-    path: ../../packages/app_network
-  app_storage:
-    path: ../../packages/app_storage
-  design_system:
-    path: ../../packages/design_system
+  # Architecture Shared Packages (Resolved natively via Pub Workspace)
+  app_core: ^0.0.1
+  app_network: ^0.0.1
+  app_storage: ^0.0.1
+  design_system: ^0.0.1
 
   # Routing
   kaisel: ^1.1.0
@@ -44,11 +43,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  app_lints:
-    path: ../../packages/app_lints
-  build_runner: ^2.16.0
-  freezed: ^4.0.0
-  injectable_generator: ^3.1.3
+
+  app_lints: ^0.0.1
+
+  build_runner: ^2.4.15
+  freezed: ^3.1.0
+  injectable_generator: ^3.0.0
 
 flutter:
   uses-material-design: true
