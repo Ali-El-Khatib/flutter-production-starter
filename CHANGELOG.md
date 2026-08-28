@@ -1,0 +1,50 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [1.1.0] - 2026-08-28
+
+### 🚀 Added
+- **Dart 3.6+ Pub Workspaces Support**: Native monorepo package resolution, shared lockfile (`pubspec.lock`), and unified `.dart_tool/` context at the workspace root.
+- **LEGO Pluggability Tests**: Added `auth_pluggability_test.dart` verifying runtime implementation swapping between `AuthRepositoryImpl` (V1) and `AuthV2RepositoryImpl` (V2) via Dependency Injection.
+- **Root Workspace Pubspec**: Added `workspace:` configuration in root `pubspec.yaml` declaring all 6 packages.
+
+### 🔄 Changed
+- **Package Linking**: Replaced all 11 internal `path: ../..` dependencies across member packages with standard workspace version constraints (`^0.0.1`).
+- **Melos Optimization**: Removed legacy `usePubspecOverrides: true` in `melos.yaml`; Melos now focuses purely on task runner orchestration (`test`, `analyze`, `generate`, `format`).
+- **Documentation**: Updated `README.md` and `ARCHITECTURE.md` to document the Pub Workspaces + Melos hybrid model.
+
+### 📦 Commits
+- [`21b5449`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/21b5449) — `feat: migrate monorepo to Dart 3.6+ Pub Workspaces + Melos hybrid`
+- [`fa7845d`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/fa7845d) — `chore: remove residual desktop and web platform directories`
+
+---
+
+## [1.0.0] - 2026-08-28
+
+### 🚀 Initial Release
+- **Monorepo Architecture**: Melos-orchestrated monorepo containing `apps/mobile` and 5 shared packages (`app_core`, `app_network`, `app_storage`, `design_system`, `app_lints`).
+- **Feature-First LEGO Modules**:
+  - `features/auth/` (Complex Clean Architecture with Use Cases, DTOs, and Token Storage)
+  - `features/auth_v2/` (Pluggable alternate implementation)
+  - `features/profile/` (Medium Clean Architecture with Repository Contract)
+  - `features/settings/` (Simple Presentation + State)
+  - `features/home/` (Dashboard & navigation overview)
+- **Infrastructure & Networking**:
+  - Centralized `DioFactory` with retry logic, bearer token authorization, and sensitive payload redaction.
+  - Functional `Result<T>` and domain `Failure` taxonomy with `FailureMessageResolver`.
+  - Storage abstractions for `SecureStorage`, `KeyValueStorage`, and TTL-based `MemoryCache`.
+- **UI & Presentation**:
+  - Design System with design tokens (Spacing, Radius, Durations), Light/Dark themes, and reusable UI primitives.
+  - Declarative routing and route guards with `kaisel: ^1.1.0`.
+  - Reactive state management with `bloc_signals` + `signals_flutter`.
+  - Presentation-only feedback with `toastification: ^3.2.0`.
+- **Quality Gates**: 100% test coverage and GitHub Actions CI workflow (`.github/workflows/ci.yml`).
+
+### 📦 Commits
+- [`8784599`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/8784599) — `feat: initial commit of production-grade Flutter starter monorepo`
