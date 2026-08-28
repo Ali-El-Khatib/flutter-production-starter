@@ -1,0 +1,20 @@
+name: auth_contract
+description: Stable authentication contracts, entities, and repository interfaces shared by interchangeable auth implementations.
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.0.0'
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  app_core: ^0.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  app_lints: ^0.0.1

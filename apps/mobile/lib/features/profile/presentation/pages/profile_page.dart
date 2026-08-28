@@ -1,9 +1,9 @@
 import 'package:app_core/app_core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/features/profile/presentation/state/profile_bloc.dart';
-import 'package:mobile/features/profile/presentation/widgets/profile_card.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import '../state/profile_bloc.dart';
+import '../widgets/profile_card.dart';
 
 /// User profile presentation page.
 class ProfilePage extends StatefulWidget {

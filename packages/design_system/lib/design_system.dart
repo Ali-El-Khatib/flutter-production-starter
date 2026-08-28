@@ -15,3 +15,6 @@ export 'src/widgets/app_button.dart';
 export 'src/widgets/app_text_field.dart';
 export 'src/widgets/app_loader.dart';
 export 'src/widgets/app_error_view.dart';
+
+// Feedback
+export 'src/feedback/app_feedback.dart';

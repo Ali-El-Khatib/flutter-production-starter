@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] - 2026-08-29
+
+### 🚀 Added
+- **Package-Level LEGO Feature Extraction**: Promoted authentication to true standalone workspace packages:
+  - `packages/features/auth_contract`: Pure domain contracts (`User`, `AuthSession`, `AuthRepository`).
+  - `packages/features/auth`: Full Clean Architecture implementation with BLoC Signals, Dio, and secure storage.
+  - `packages/features/auth_v2`: Alternative auth implementation with zero coupling to `feature_auth`, proving contract-level swappability.
+- **In-App Feature Pragmatism**: Retained app-level composition (`home`), user preferences (`settings`), and domain profile (`profile`) within `apps/mobile/lib/features/` to prevent unnecessary package ceremony.
+- **Architectural Rules Guide**: Updated `docs/architecture/lego_features.md` and `README.md` clarifying when to keep features in-app vs when to promote them to packages.
+
+### 📦 Commits
+- [`3d30031`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/3d30031) — `feat: extract auth to package-level LEGO bricks and retain in-app features`
+
+---
+
 ## [1.1.0] - 2026-08-28
 
 ### 🚀 Added

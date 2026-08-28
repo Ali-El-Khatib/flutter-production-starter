@@ -29,13 +29,20 @@ A scalable, production-oriented Flutter starter repository and architecture temp
 ```text
 /
 ├── apps/
-│   └── mobile/                # Main Flutter application (Bootstrap, DI, Routes, Features)
+│   └── mobile/                # Main Flutter application (Bootstrap, DI, Routes, In-App Features)
+│       └── lib/
+│           ├── app/           # App root, bootstrap, DI, routes & guards
+│           └── features/      # App-level features (home, profile, settings)
 ├── packages/
 │   ├── app_core/              # Stable primitives (Result<T>, Failures, Exceptions, AppLogger)
 │   ├── app_network/           # Centralized Dio, interceptors, error mappers, ApiClient
 │   ├── app_storage/           # Storage contracts (SecureStorage, KeyValueStorage, MemoryCache)
 │   ├── design_system/         # Tokens, theme, buttons, text fields, loaders, error states
-│   └── app_lints/             # Shared strict analysis and linting configuration
+│   ├── app_lints/             # Shared strict analysis and linting configuration
+│   └── features/              # Package-Level LEGO Bricks
+│       ├── auth_contract/     # Pure contract (User, AuthSession, AuthRepository)
+│       ├── auth/              # Production auth implementation (Clean Architecture, BLoC Signals, Dio)
+│       └── auth_v2/           # Alternative auth implementation (Zero coupling to auth, pure contract swap)
 ├── melos.yaml                 # Monorepo task runner configuration
 ├── pubspec.yaml               # Root Pub Workspace configuration
 ├── ARCHITECTURE.md            # In-depth architectural rules and conventions

@@ -1,5 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/app/feedback/app_feedback.dart';
 import 'package:toastification/toastification.dart';
 
 /// Toastification implementation of [AppFeedback].

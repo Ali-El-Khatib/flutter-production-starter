@@ -1,7 +1,9 @@
 import 'package:bloc_signals/bloc_signals.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:mobile/features/settings/presentation/state/settings_state.dart';
+import 'settings_state.dart';
+
+export 'settings_state.dart';
 
 sealed class SettingsEvent {}
 

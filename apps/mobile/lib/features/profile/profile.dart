@@ -4,8 +4,11 @@ library profile;
 export 'domain/entities/user_profile.dart';
 export 'domain/repositories/profile_repository.dart';
 
+// Data
+export 'data/repositories/profile_repository_impl.dart';
+
 // Presentation
+export 'presentation/pages/profile_page.dart';
 export 'presentation/state/profile_bloc.dart';
 export 'presentation/state/profile_state.dart';
-export 'presentation/pages/profile_page.dart';
 export 'presentation/widgets/profile_card.dart';

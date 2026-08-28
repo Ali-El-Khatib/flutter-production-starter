@@ -1,11 +1,10 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_storage/app_storage.dart';
+import 'package:auth_contract/auth_contract.dart';
+import 'package:feature_auth/feature_auth.dart';
+import 'package:feature_auth_v2/feature_auth_v2.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mobile/features/auth/auth.dart';
-import 'package:mobile/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:mobile/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:mobile/features/auth_v2/auth_v2.dart';
 
 class _MockRemoteDataSource implements AuthRemoteDataSource {
   @override

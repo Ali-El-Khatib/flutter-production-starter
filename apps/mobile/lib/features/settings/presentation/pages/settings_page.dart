@@ -1,7 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/features/settings/presentation/state/settings_bloc.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import '../state/settings_bloc.dart';
 
 /// Settings and preferences screen.
 class SettingsPage extends StatelessWidget {

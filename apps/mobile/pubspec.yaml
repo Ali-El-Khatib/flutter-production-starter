@@ -20,6 +20,9 @@ dependencies:
   app_network: ^0.0.1
   app_storage: ^0.0.1
   design_system: ^0.0.1
+  auth_contract: ^0.0.1
+  feature_auth: ^0.0.1
+  feature_auth_v2: ^0.0.1
 
   # Routing
   kaisel: ^1.1.0

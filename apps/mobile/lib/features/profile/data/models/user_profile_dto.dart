@@ -1,4 +1,4 @@
-import 'package:mobile/features/profile/domain/entities/user_profile.dart';
+import '../../domain/entities/user_profile.dart';
 
 /// Data Transfer Object for Profile API serialization and domain mapping.
 class UserProfileDto {

@@ -1,7 +1,9 @@
 import 'package:bloc_signals/bloc_signals.dart';
 import 'package:injectable/injectable.dart';
-import 'package:mobile/features/profile/domain/repositories/profile_repository.dart';
-import 'package:mobile/features/profile/presentation/state/profile_state.dart';
+import '../../domain/repositories/profile_repository.dart';
+import 'profile_state.dart';
+
+export 'profile_state.dart';
 
 sealed class ProfileEvent {}
 

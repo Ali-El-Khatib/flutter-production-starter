@@ -1,5 +1,5 @@
 import 'package:app_core/app_core.dart';
-import 'package:mobile/features/profile/domain/entities/user_profile.dart';
+import '../../domain/entities/user_profile.dart';
 
 /// Presentation state for Profile feature.
 class ProfileState {

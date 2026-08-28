@@ -1,12 +1,11 @@
 import 'package:app_core/app_core.dart';
 import 'package:design_system/design_system.dart';
+import 'package:feature_auth/feature_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/app/config/app_config.dart';
 import 'package:mobile/app/di/injection.dart';
-import 'package:mobile/app/feedback/app_feedback.dart';
 import 'package:mobile/app/router/app_router.dart';
 import 'package:mobile/app/router/app_routes.dart';
-import 'package:mobile/features/auth/auth.dart';
 import 'package:mobile/features/home/home.dart';
 import 'package:mobile/features/profile/profile.dart';
 import 'package:mobile/features/settings/settings.dart';

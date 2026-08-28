@@ -1,6 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/features/profile/domain/entities/user_profile.dart';
+import '../../domain/entities/user_profile.dart';
 
 /// Reusable profile presentation card.
 class ProfileCard extends StatelessWidget {

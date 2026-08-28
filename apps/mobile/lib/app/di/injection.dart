@@ -1,3 +1,4 @@
+import 'package:feature_auth/feature_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/app/config/app_config.dart';
@@ -16,4 +17,7 @@ Future<void> configureDependencies(AppConfig config) async {
   }
   getIt.registerSingleton<AppConfig>(config);
   getIt.init(environment: config.environment.name);
+
+  // Register Package-Level LEGO Bricks
+  registerAuthFeature(getIt);
 }

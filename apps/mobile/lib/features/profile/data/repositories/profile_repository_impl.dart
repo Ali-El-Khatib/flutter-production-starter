@@ -1,9 +1,9 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_network/app_network.dart';
 import 'package:injectable/injectable.dart';
-import 'package:mobile/features/profile/data/models/user_profile_dto.dart';
-import 'package:mobile/features/profile/domain/entities/user_profile.dart';
-import 'package:mobile/features/profile/domain/repositories/profile_repository.dart';
+import '../../domain/entities/user_profile.dart';
+import '../../domain/repositories/profile_repository.dart';
+import '../models/user_profile_dto.dart';
 
 /// Implementation of [ProfileRepository] consuming [ApiClient].
 @LazySingleton(as: ProfileRepository)
@@ -14,7 +14,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<Result<UserProfile>> getProfile() async {
-    // In starter repo, we simulate API response or call /api/v1/profile
     final result = await _apiClient.get<Map<String, dynamic>>(
       '/api/v1/profile',
       responseParser: (data) =>
@@ -24,7 +23,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return result.when(
       success: (data) {
         if (data.isEmpty) {
-          // Default profile preview
           return const Result.success(
             UserProfile(
               id: 'usr_1',
@@ -40,7 +38,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
         return Result.success(dto.toDomain());
       },
       failure: (failure) {
-        // Return default preview if server is unreachable demo endpoint
         if (failure is ConnectivityFailure ||
             failure is NotFoundFailure ||
             failure is ServerFailure) {
@@ -78,7 +75,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
         return Result.success(dto.toDomain());
       },
       failure: (failure) {
-        // Optimistic local update fallback for starter preview
         return Result.success(
           UserProfile(
             id: 'usr_1',

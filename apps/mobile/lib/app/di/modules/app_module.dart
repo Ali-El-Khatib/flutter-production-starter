@@ -1,6 +1,6 @@
 import 'package:app_core/app_core.dart';
+import 'package:design_system/design_system.dart';
 import 'package:injectable/injectable.dart';
-import 'package:mobile/app/feedback/app_feedback.dart';
 import 'package:mobile/app/feedback/toastification_feedback.dart';
 import 'package:mobile/app/router/app_router.dart';
 

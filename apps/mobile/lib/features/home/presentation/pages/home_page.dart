@@ -1,7 +1,7 @@
 import 'package:design_system/design_system.dart';
+import 'package:feature_auth/feature_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/app/config/app_config.dart';
-import 'package:mobile/features/auth/auth.dart';
 import 'package:mobile/features/settings/settings.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 

@@ -11,6 +11,9 @@ workspace:
   - packages/app_network
   - packages/app_storage
   - packages/design_system
+  - packages/features/auth_contract
+  - packages/features/auth
+  - packages/features/auth_v2
 
 dev_dependencies:
   melos: ^6.0.0

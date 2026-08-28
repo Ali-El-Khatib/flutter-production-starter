@@ -12,20 +12,11 @@
 import 'package:app_core/app_core.dart' as _i130;
 import 'package:app_network/app_network.dart' as _i107;
 import 'package:app_storage/app_storage.dart' as _i646;
+import 'package:design_system/design_system.dart' as _i1063;
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../features/auth/data/datasources/auth_remote_data_source.dart'
-    as _i108;
-import '../../features/auth/data/repositories/auth_repository_impl.dart'
-    as _i153;
-import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
-import '../../features/auth/domain/usecases/get_current_user_use_case.dart'
-    as _i75;
-import '../../features/auth/domain/usecases/login_use_case.dart' as _i37;
-import '../../features/auth/domain/usecases/logout_use_case.dart' as _i711;
-import '../../features/auth/presentation/state/auth_bloc.dart' as _i186;
 import '../../features/profile/data/repositories/profile_repository_impl.dart'
     as _i334;
 import '../../features/profile/domain/repositories/profile_repository.dart'
@@ -34,7 +25,6 @@ import '../../features/profile/presentation/state/profile_bloc.dart' as _i421;
 import '../../features/settings/presentation/state/settings_bloc.dart'
     as _i1024;
 import '../config/app_config.dart' as _i650;
-import '../feedback/app_feedback.dart' as _i307;
 import '../router/app_router.dart' as _i81;
 import 'modules/app_module.dart' as _i349;
 import 'modules/network_module.dart' as _i851;
@@ -57,7 +47,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i130.AppLogger>(() => appModule.logger);
     gh.lazySingleton<_i130.FailureMessageResolver>(
         () => appModule.failureMessageResolver);
-    gh.lazySingleton<_i307.AppFeedback>(() => appModule.feedback);
+    gh.lazySingleton<_i1063.AppFeedback>(() => appModule.feedback);
     gh.lazySingleton<_i81.AppRouter>(() => appModule.router);
     gh.lazySingleton<_i107.NetworkErrorMapper>(
         () => networkModule.networkErrorMapper);
@@ -77,23 +67,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i334.ProfileRepositoryImpl(gh<_i107.ApiClient>()));
     gh.factory<_i421.ProfileBloc>(
         () => _i421.ProfileBloc(gh<_i894.ProfileRepository>()));
-    gh.lazySingleton<_i108.AuthRemoteDataSource>(
-        () => _i108.AuthRemoteDataSourceImpl(gh<_i107.ApiClient>()));
-    gh.lazySingleton<_i787.AuthRepository>(() => _i153.AuthRepositoryImpl(
-          remoteDataSource: gh<_i108.AuthRemoteDataSource>(),
-          secureStorage: gh<_i646.SecureStorage>(),
-        ));
-    gh.factory<_i75.GetCurrentUserUseCase>(
-        () => _i75.GetCurrentUserUseCase(gh<_i787.AuthRepository>()));
-    gh.factory<_i37.LoginUseCase>(
-        () => _i37.LoginUseCase(gh<_i787.AuthRepository>()));
-    gh.factory<_i711.LogoutUseCase>(
-        () => _i711.LogoutUseCase(gh<_i787.AuthRepository>()));
-    gh.lazySingleton<_i186.AuthBloc>(() => _i186.AuthBloc(
-          loginUseCase: gh<_i37.LoginUseCase>(),
-          logoutUseCase: gh<_i711.LogoutUseCase>(),
-          getCurrentUserUseCase: gh<_i75.GetCurrentUserUseCase>(),
-        ));
     return this;
   }
 }
