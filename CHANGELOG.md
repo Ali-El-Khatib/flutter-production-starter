@@ -11,15 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🚀 Added
 - **Dart 3.6+ Pub Workspaces Support**: Native monorepo package resolution, shared lockfile (`pubspec.lock`), and unified `.dart_tool/` context at the workspace root.
-- **LEGO Pluggability Tests**: Added `auth_pluggability_test.dart` verifying runtime implementation swapping between `AuthRepositoryImpl` (V1) and `AuthV2RepositoryImpl` (V2) via Dependency Injection.
+- **LEGO Pluggability & Substitutability**: Added comprehensive contract tests (`auth_pluggability_test.dart`) and architectural documentation (`docs/architecture/lego_features.md` and `apps/mobile/lib/features/auth_v2/README.md`) demonstrating zero-blast-radius manual feature brick swapping.
 - **Root Workspace Pubspec**: Added `workspace:` configuration in root `pubspec.yaml` declaring all 6 packages.
 
 ### 🔄 Changed
 - **Package Linking**: Replaced all 11 internal `path: ../..` dependencies across member packages with standard workspace version constraints (`^0.0.1`).
 - **Melos Optimization**: Removed legacy `usePubspecOverrides: true` in `melos.yaml`; Melos now focuses purely on task runner orchestration (`test`, `analyze`, `generate`, `format`).
-- **Documentation**: Updated `README.md` and `ARCHITECTURE.md` to document the Pub Workspaces + Melos hybrid model.
+- **Documentation**: Updated `README.md` and `ARCHITECTURE.md` to document the Pub Workspaces + Melos hybrid model and LEGO feature replaceability.
 
 ### 📦 Commits
+- [`507a814`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/507a814) — `docs: add CHANGELOG.md with release history and commit references`
 - [`21b5449`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/21b5449) — `feat: migrate monorepo to Dart 3.6+ Pub Workspaces + Melos hybrid`
 - [`fa7845d`](https://github.com/Ali-El-Khatib/flutter-production-starter/commit/fa7845d) — `chore: remove residual desktop and web platform directories`
 

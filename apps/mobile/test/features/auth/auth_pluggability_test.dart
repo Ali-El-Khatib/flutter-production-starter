@@ -7,35 +7,6 @@ import 'package:mobile/features/auth/data/datasources/auth_remote_data_source.da
 import 'package:mobile/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:mobile/features/auth_v2/auth_v2.dart';
 
-enum AuthVersion { v1, v2 }
-
-void configureAuthImplementation({
-  required GetIt getIt,
-  required AuthVersion version,
-  required SecureStorage secureStorage,
-  required AuthRemoteDataSource remoteDataSource,
-}) {
-  if (getIt.isRegistered<AuthRepository>()) {
-    getIt.unregister<AuthRepository>();
-  }
-
-  switch (version) {
-    case AuthVersion.v1:
-      getIt.registerLazySingleton<AuthRepository>(
-        () => AuthRepositoryImpl(
-          remoteDataSource: remoteDataSource,
-          secureStorage: secureStorage,
-        ),
-      );
-    case AuthVersion.v2:
-      getIt.registerLazySingleton<AuthRepository>(
-        () => AuthV2RepositoryImpl(
-          secureStorage: secureStorage,
-        ),
-      );
-  }
-}
-
 class _MockRemoteDataSource implements AuthRemoteDataSource {
   @override
   Future<Result<Map<String, dynamic>>> login({
@@ -67,8 +38,30 @@ class _MockRemoteDataSource implements AuthRemoteDataSource {
   Future<Result<void>> logout() async => const Result.success(null);
 }
 
+/// Verifies that any [AuthRepository] implementation satisfies the core contract expectations.
+Future<void> verifyAuthRepositoryContract({
+  required AuthRepository repository,
+  required String testEmail,
+  required String testPassword,
+}) async {
+  final useCase = LoginUseCase(repository);
+  final result = await useCase(email: testEmail, password: testPassword);
+
+  expect(result.isSuccess, isTrue);
+  final session = result.dataOrNull;
+  expect(session, isNotNull);
+  expect(session?.user.email, equals(testEmail));
+  expect(session?.token.isNotEmpty, isTrue);
+
+  final currentUserResult = await repository.getCurrentUser();
+  expect(currentUserResult.isSuccess, isTrue);
+
+  final logoutResult = await repository.logout();
+  expect(logoutResult.isSuccess, isTrue);
+}
+
 void main() {
-  group('LEGO Pluggability: AuthRepository Swapping', () {
+  group('LEGO Feature Replaceability & Substitutability', () {
     late GetIt testGetIt;
     late SecureStorage secureStorage;
     late AuthRemoteDataSource remoteDataSource;
@@ -83,60 +76,80 @@ void main() {
       await testGetIt.reset();
     });
 
-    test('Auth V1 implementation registers and fulfills LoginUseCase contract', () async {
-      configureAuthImplementation(
-        getIt: testGetIt,
-        version: AuthVersion.v1,
-        secureStorage: secureStorage,
+    test('Auth V1 implementation satisfies the AuthRepository contract',
+        () async {
+      final repository = AuthRepositoryImpl(
         remoteDataSource: remoteDataSource,
+        secureStorage: secureStorage,
       );
 
-      final repo = testGetIt<AuthRepository>();
-      final useCase = LoginUseCase(repo);
-
-      final result = await useCase(email: 'test@example.com', password: 'password123');
-
-      expect(result.isSuccess, isTrue);
-      expect(result.dataOrNull?.user.id, equals('usr_v1'));
-      expect(result.dataOrNull?.token, equals('v1_token_123'));
+      await verifyAuthRepositoryContract(
+        repository: repository,
+        testEmail: 'user@example.com',
+        testPassword: 'password123',
+      );
     });
 
-    test('Auth V2 implementation plugs in seamlessly without modifying domain UseCases', () async {
-      configureAuthImplementation(
-        getIt: testGetIt,
-        version: AuthVersion.v2,
+    test('Auth V2 implementation satisfies the AuthRepository contract',
+        () async {
+      final repository = AuthV2RepositoryImpl(
         secureStorage: secureStorage,
-        remoteDataSource: remoteDataSource,
       );
 
-      final repo = testGetIt<AuthRepository>();
-      final useCase = LoginUseCase(repo);
-
-      final result = await useCase(email: 'test@example.com', password: 'password123');
-
-      expect(result.isSuccess, isTrue);
-      expect(result.dataOrNull?.user.id, equals('usr_v2_99'));
-      expect(result.dataOrNull?.user.role, equals('pro_architect'));
-      expect(result.dataOrNull?.token.startsWith('jwt_v2_secure_token_'), isTrue);
+      await verifyAuthRepositoryContract(
+        repository: repository,
+        testEmail: 'architect@example.com',
+        testPassword: 'password123',
+      );
     });
 
-    test('Guarantees exactly ONE AuthRepository implementation is active at a time', () {
-      configureAuthImplementation(
-        getIt: testGetIt,
-        version: AuthVersion.v1,
-        secureStorage: secureStorage,
+    test(
+        'Domain UseCases consume either implementation seamlessly without code changes',
+        () async {
+      final v1Repo = AuthRepositoryImpl(
         remoteDataSource: remoteDataSource,
+        secureStorage: secureStorage,
+      );
+      final v2Repo = AuthV2RepositoryImpl(
+        secureStorage: secureStorage,
+      );
+
+      final v1Result = await LoginUseCase(v1Repo)(
+        email: 'v1@test.com',
+        password: 'password123',
+      );
+      final v2Result = await LoginUseCase(v2Repo)(
+        email: 'v2@test.com',
+        password: 'password123',
+      );
+
+      expect(v1Result.isSuccess, isTrue);
+      expect(v2Result.isSuccess, isTrue);
+      expect(v1Result.dataOrNull?.token, equals('v1_token_123'));
+      expect(v2Result.dataOrNull?.token.startsWith('jwt_v2_secure_token_'),
+          isTrue);
+    });
+
+    test(
+        'Guarantees exactly ONE AuthRepository implementation is active at startup',
+        () {
+      // 1. Register V1 in DI
+      testGetIt.registerLazySingleton<AuthRepository>(
+        () => AuthRepositoryImpl(
+          remoteDataSource: remoteDataSource,
+          secureStorage: secureStorage,
+        ),
       );
 
       expect(testGetIt.isRegistered<AuthRepository>(), isTrue);
       expect(testGetIt<AuthRepository>(), isA<AuthRepositoryImpl>());
 
-      // Swap to V2
-      configureAuthImplementation(
-        getIt: testGetIt,
-        version: AuthVersion.v2,
-        secureStorage: secureStorage,
-        remoteDataSource: remoteDataSource,
+      // 2. Manual Developer Swap: unregister and switch to V2
+      testGetIt.unregister<AuthRepository>();
+      testGetIt.registerLazySingleton<AuthRepository>(
+        () => AuthV2RepositoryImpl(
+          secureStorage: secureStorage,
+        ),
       );
 
       expect(testGetIt.isRegistered<AuthRepository>(), isTrue);

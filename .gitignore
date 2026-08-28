@@ -30,7 +30,7 @@ migrate_working_dir/
 .pub/
 /build/
 **/build/
-pubspec.lock
+# pubspec.lock
 **/pubspec_overrides.yaml
 
 # Android related

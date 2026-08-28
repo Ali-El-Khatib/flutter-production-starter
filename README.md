@@ -20,6 +20,7 @@ A scalable, production-oriented Flutter starter repository and architecture temp
 - **Centralized Networking**: Centralized `dio` with automatic retry, bearer token management, sensitive log sanitization, and strongly typed `Result<T>` mapping.
 - **Predictable Error Pipeline**: Domain `Failure` taxonomy with `FailureMessageResolver` and presentation-layer `toastification: ^3.2.0`.
 - **Dedicated Design System**: Standalone `design_system` package with tokens (`Spacing`, `Radius`, `Durations`), theme definitions (`AppTheme`), and reusable UI primitives.
+- **LEGO Feature Replaceability**: Features can be replaced (e.g. `auth` ➔ `auth_v2`) via single-point DI binding without touching domain use cases, route guards, or UI callers. Read the [LEGO Features Guide](docs/architecture/lego_features.md).
 
 ---
 
