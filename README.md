@@ -38,6 +38,7 @@ A scalable, production-oriented Flutter starter repository and architecture temp
 ├── melos.yaml                 # Monorepo task runner configuration
 ├── pubspec.yaml               # Root Pub Workspace configuration
 ├── ARCHITECTURE.md            # In-depth architectural rules and conventions
+├── CHANGELOG.md               # Version history and release notes
 └── LICENSE                    # Open Source MIT License
 ```
 
