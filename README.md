@@ -125,9 +125,8 @@ shipping an application:
 
 If this is your first contribution, begin with
 [Instructions_For_Beginners.md](Instructions_For_Beginners.md). Then read
-[CONTRIBUTING.md](CONTRIBUTING.md), [ARCHITECTURE.md](ARCHITECTURE.md), and
-[AGENTS.md](AGENTS.md). Pull requests must keep generated code current and pass
-the same checks as CI.
+[CONTRIBUTING.md](CONTRIBUTING.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
+Pull requests must keep generated code current and pass the same checks as CI.
 
 ## License
 

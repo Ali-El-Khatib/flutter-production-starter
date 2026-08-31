@@ -10,7 +10,7 @@ expected to understand every package before making a focused change.
 
 ## 🏛️ Architectural Principles
 
-Before contributing, please read [ARCHITECTURE.md](./ARCHITECTURE.md) and [AGENTS.md](./AGENTS.md):
+Before contributing, please read [ARCHITECTURE.md](./ARCHITECTURE.md):
 1. **LEGO Module Boundaries**: Features in `apps/mobile/lib/features/` must be self-contained and export their public API only via `feature/feature.dart`.
 2. **One-Directional Dependencies**: Shared packages (`packages/*`) must never depend on application features.
 3. **Constructor Injection**: Use GetIt + Injectable with constructor injection. Avoid global service location in domain/data.

@@ -279,7 +279,6 @@ Read these documents in this order:
 3. [docs/architecture/lego_features.md](docs/architecture/lego_features.md) for
    deciding whether a feature belongs in the app or a package.
 4. [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a pull request.
-5. [AGENTS.md](AGENTS.md) for the complete repository rules.
 
 Take it one feature at a time. Clear, tested, understandable code is more
 valuable than using every architectural pattern at once.
