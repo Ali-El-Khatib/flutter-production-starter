@@ -138,22 +138,45 @@ You do not need to customize everything on the first day. Work through this
 checklist gradually:
 
 1. Choose your product name and supported platforms.
-2. Replace the placeholder Android application ID
-   `com.yourcompany.mobile` and the equivalent identifiers on other platforms.
-3. Update the app names and API URLs in
+2. From a clean Git working tree, run the guided setup:
+
+   ```bash
+   dart run scripts/configure_app.dart
+   ```
+
+   It asks for the product name and one application ID such as
+   `com.yourcompany.your_product`, previews the files it will update, and waits
+   for confirmation. It updates the Android namespace/application ID and
+   launcher label, moves `MainActivity`, updates iOS bundle identifiers and
+   names, and keeps the environment-specific app names consistent.
+3. Replace the example API URLs in
    `apps/mobile/lib/app/config/app_config.dart`.
-4. Connect one development API flow before connecting every feature.
-5. Keep the demo implementations available only in development and test.
-6. Remove sample features only after you understand whether they provide a
+4. Add product splash artwork under `apps/mobile/assets/app/branding/`, update
+   `apps/mobile/flutter_native_splash.yaml`, and run
+   `dart run melos run generate`.
+5. Connect one development API flow before connecting every feature.
+6. Keep the demo implementations available only in development and test.
+7. Remove sample features only after you understand whether they provide a
    useful reference for your team.
-7. Configure signing credentials through local or CI secrets; never commit
+8. Configure signing credentials through local or CI secrets; never commit
    private keys or passwords.
-8. Run staging on a real device before treating the application as release
+9. Run staging on a real device before treating the application as release
    ready.
 
 It is fine to keep the architecture and replace the example product behavior
 one feature at a time. A starter should reduce your decisions, not force you to
 finish every setup task before building something useful.
+
+For a repeatable non-interactive setup, use:
+
+```bash
+dart run scripts/configure_app.dart --name "Your Product" --id com.yourcompany.your_product
+```
+
+Add `--dry-run` whenever you want to see the complete plan without changing
+anything. The script intentionally leaves the Dart package name `mobile`
+alone; that is an internal workspace name and does not appear as the installed
+application identity.
 
 ## Words You Will See in This Repository
 

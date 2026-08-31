@@ -2,6 +2,11 @@
 
 Thank you for contributing to this production-oriented Flutter starter architecture.
 
+By participating, you agree to follow our
+[Code of Conduct](./CODE_OF_CONDUCT.md). Report suspected vulnerabilities using
+the private process in [SECURITY.md](./SECURITY.md), never through a public
+issue.
+
 If this is your first Flutter monorepo contribution, please start with
 [A Friendly Start for Beginners](./Instructions_For_Beginners.md). You are not
 expected to understand every package before making a focused change.
@@ -46,6 +51,10 @@ dart run melos run test
 2. Ensure new features or packages have unit/widget tests.
 3. Run `dart run melos run format` to ensure standard formatting.
 4. Submit your Pull Request with a clear summary of changes.
+
+Use the repository's issue forms before starting substantial work. A focused
+issue lets maintainers confirm scope and architectural fit before you invest
+time in an implementation.
 
 Generated source must be current. CI runs generation followed by
 `git diff --exit-code`, so generator inputs and committed output cannot drift.

@@ -22,25 +22,30 @@ and modify the development app without understanding every package first.
   has an independent contract, infrastructure, state, and UI boundary.
 - **Centralized infrastructure** owns Dio, secure storage, preferences, errors,
   logging, and design primitives.
+- **Explicit asset ownership** keeps application artwork, reusable design
+  resources, package fonts, and documentation media in their owning modules.
 - **Production-safe composition** installs bearer-token injection, authenticated
   route guards, platform secure storage, and durable preferences.
 - **Honest demo behavior** is selected only by development configuration; failed
   staging and production requests remain failures.
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) and the
-[feature packaging guide](docs/architecture/lego_features.md).
+See [ARCHITECTURE.md](ARCHITECTURE.md), its
+[asset and font ownership guide](ARCHITECTURE.md#9-asset-and-font-ownership),
+and the [feature packaging guide](docs/architecture/lego_features.md).
 
 ## Workspace layout
 
 ```text
 /
 ├── apps/mobile/                    # Flutter application and in-app features
+│   └── assets/                     # App and in-app feature asset guidance
+├── docs/assets/                    # Repository screenshots and diagrams
 ├── packages/
 │   ├── app_core/                   # Pure Dart result, failure, and logging APIs
 │   ├── app_lints/                  # Shared strict analyzer configuration
 │   ├── app_network/                # Pure Dart Dio infrastructure
 │   ├── app_storage/                # Secure storage, preferences, and memory cache
-│   ├── design_system/              # Flutter tokens, themes, and UI primitives
+│   ├── design_system/              # UI primitives, shared assets, and font guidance
 │   └── features/
 │       ├── auth_contract/          # Pure Dart auth entities and repository contract
 │       └── auth/                   # Auth data, use cases, state, UI, and DI
@@ -72,6 +77,18 @@ dart run melos run test
 dart run melos run run:dev
 ```
 
+Turning the starter into a product? Configure its visible name and native
+identifiers in one reviewed operation:
+
+```bash
+dart run scripts/configure_app.dart
+```
+
+The command previews every affected file, validates a shared Android/iOS-safe
+identifier, preserves the iOS test-target suffix, and refuses to write over an
+unclean Git working tree. For automation, pass `--name` and `--id`; use
+`--dry-run` to inspect the plan without changing files.
+
 Development uses explicit sample adapters so the starter can be explored
 without a backend. Staging and production use the configured APIs and never
 convert transport/server failures into sample success data.
@@ -85,7 +102,9 @@ Replace the reserved example base URLs in
 |---|---|
 | `flutter pub get --enforce-lockfile` | Resolve the native Pub Workspace reproducibly |
 | `dart run melos bootstrap --enforce-lockfile` | Verify Melos sees and bootstraps all members |
-| `dart run melos run generate` | Regenerate committed source files |
+| `dart run melos run configure` | Interactively configure the product name and native application identifiers |
+| `dart run melos run generate` | Regenerate committed Dart and native splash files |
+| `dart run melos run splash:generate` | Regenerate Android and iOS launch screens only |
 | `dart run melos run format:check` | Verify formatting |
 | `dart run melos run analyze` | Analyze all members with Dart analyzer |
 | `dart run melos run test` | Run pure Dart and Flutter suites correctly |
@@ -115,7 +134,8 @@ asynchronous `shared_preferences` API. Both adapters namespace owned keys.
 The starter deliberately does not commit release signing credentials. Before
 shipping an application:
 
-1. Replace `com.yourcompany.mobile` with the product application ID.
+1. Run `dart run scripts/configure_app.dart` to replace the product name,
+   Android application ID, and iOS bundle identifiers together.
 2. Configure Android and iOS signing through local/CI secrets.
 3. Replace the example API URLs.
 4. Run the complete verification suite and a signed release build.
@@ -127,6 +147,12 @@ If this is your first contribution, begin with
 [Instructions_For_Beginners.md](Instructions_For_Beginners.md). Then read
 [CONTRIBUTING.md](CONTRIBUTING.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
 Pull requests must keep generated code current and pass the same checks as CI.
+
+Community participation is governed by the
+[Code of Conduct](CODE_OF_CONDUCT.md). Please use the structured GitHub issue
+forms for bugs, proposals, and documentation problems. Suspected
+vulnerabilities must be reported privately according to the
+[Security Policy](SECURITY.md), never in a public issue.
 
 ## License
 

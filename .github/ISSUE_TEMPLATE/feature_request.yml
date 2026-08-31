@@ -1,0 +1,75 @@
+name: Feature request
+description: Propose a focused improvement to the reusable starter architecture.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Good starter features remove repeated product work without turning the repository into an internal framework. Describe the concrete problem first.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Who encounters the problem, and what work or risk does it create?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Explain the smallest useful change and its intended developer experience.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Primary area
+      options:
+        - Mobile application or bootstrap
+        - Feature architecture
+        - Routing or dependency injection
+        - Networking or storage
+        - Design system
+        - Developer tooling or generation
+        - CI, release, or security
+        - Documentation or onboarding
+        - New reusable package
+        - Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Architecture and maintenance impact
+      description: Note new dependencies, public APIs, generated files, package boundaries, migration cost, or long-term ownership.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What can developers do today, and why is that insufficient?
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to help implement or test this proposal.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checklist
+      options:
+        - label: I searched existing issues and discussions for this proposal.
+          required: true
+        - label: This proposal solves a reusable starter problem rather than one product's private requirement.
+          required: true
+        - label: I considered whether documentation alone would solve the problem.
+          required: true

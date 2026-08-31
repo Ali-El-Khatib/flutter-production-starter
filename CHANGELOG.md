@@ -17,6 +17,16 @@ and semantic versioning.
   release build.
 - An enforced 60% mobile line-coverage non-regression floor.
 - Auth/profile contract validation through `DataContractFailure`.
+- A first-party application identity wizard with interactive, flag-based, and
+  dry-run modes for synchronized Android, iOS, and Flutter product naming.
+- Root-level tests for application identity validation, native identifier
+  replacement, Kotlin package relocation, escaping, and repeat configuration.
+- Reproducible Android and iOS launch-screen generation through
+  `flutter_native_splash` with committed native output.
+- Explicit ownership guidance and standard locations for application assets,
+  reusable design-system assets, licensed fonts, and documentation media.
+- Contributor Covenant, security policy, structured bug/feature/documentation
+  issue forms, and a repository-specific pull request template.
 
 ### Changed
 
@@ -26,6 +36,13 @@ and semantic versioning.
 - Melos 8 configuration now lives in the root Pub workspace manifest, removing
   legacy `pubspec_overrides.yaml` generation.
 - Flutter is pinned to `3.47.0` in CI.
+- Root analysis and pure-Dart test commands now include first-party repository
+  tooling.
+- Workspace generation now refreshes both Injectable output and native splash
+  resources from their authoritative configuration.
+- Beginner, contribution, architecture, and release guidance now cover product
+  identity setup, asset ownership, native splash customization, and private
+  vulnerability reporting.
 
 ### Removed
 

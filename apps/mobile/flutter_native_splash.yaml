@@ -1,0 +1,24 @@
+# Generates the Android and iOS launch screens from one committed source.
+#
+# Add product artwork under assets/app/branding/ and uncomment the image fields
+# only after replacing the starter branding. Then run the workspace `generate`
+# script and commit the generated native files.
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  color: "#FFFFFF"
+  color_dark: "#121212"
+
+  # image: assets/app/branding/splash_logo.png
+  # image_dark: assets/app/branding/splash_logo_dark.png
+
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#121212"
+
+    # Android 12 masks the center image. Follow the safe-zone dimensions in the
+    # flutter_native_splash documentation before enabling these fields.
+    # image: assets/app/branding/splash_logo_android_12.png
+    # image_dark: assets/app/branding/splash_logo_android_12_dark.png

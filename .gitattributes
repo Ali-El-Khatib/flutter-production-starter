@@ -3,3 +3,7 @@
 *.bat text eol=crlf
 *.cmd text eol=crlf
 *.ps1 text eol=crlf
+
+# flutter_native_splash emits indentation on a generated XML comment spacer.
+apps/mobile/android/app/src/main/res/values-v31/styles.xml whitespace=-blank-at-eol
+apps/mobile/android/app/src/main/res/values-night-v31/styles.xml whitespace=-blank-at-eol

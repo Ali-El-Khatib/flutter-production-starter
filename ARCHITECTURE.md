@@ -134,10 +134,59 @@ screen-scoped profile state remains factory-created.
 Persistence is explicit through storage contracts. Hydration is not installed
 until a concrete restorable-state use case justifies it.
 
-## 9. Generated code
+## 9. Asset and font ownership
 
-Injectable output is committed. Generator inputs are authoritative; generated
-files are never edited manually.
+Runtime resources follow the same ownership rules as source code. There is no
+generic repository-level `shared/assets` directory.
+
+| Resource | Owner |
+|---|---|
+| Product branding and application-wide artwork | `apps/mobile/assets/app/` |
+| Assets for a feature inside the app | `apps/mobile/assets/features/<feature>/` |
+| Reusable design-system icons and illustrations | `packages/design_system/assets/` |
+| Assets for an extracted feature | That feature package's `assets/` directory |
+| Licensed typography shared through the design system | `packages/design_system/lib/fonts/` |
+| README screenshots and architecture diagrams | `docs/assets/` |
+| Test fixtures and golden files | The owning package's `test/` directory |
+
+Each Flutter package declares only its own non-empty asset directories. Package
+assets are loaded with an explicit package name. Nested directories are listed
+explicitly in the owning pubspec rather than relying on recursive inclusion.
+
+The starter uses platform system fonts by default. A consuming product may add
+licensed font files under `packages/design_system/lib/fonts/`, declare them from
+the application pubspec with `packages/design_system/fonts/...` paths, and apply
+the family centrally through `AppTheme`.
+
+The README files inside the asset roots document the expected layout. Pubspec
+entries and typed asset APIs are introduced only when real resources exist; the
+starter does not ship placeholder images, fonts, or dead asset declarations.
+
+Platform launcher icons and launch screens remain in their Android and iOS
+resource catalogs. Static launch screens are generated from
+`apps/mobile/flutter_native_splash.yaml`; manual platform customization is the
+escape hatch for requirements the generator cannot represent. The generated
+native files are committed and verified by the workspace generation gate.
+Secrets and environment credentials are never assets.
+
+## 10. Product identity setup
+
+`scripts/configure_app.dart` is first-party, dependency-free onboarding
+automation for the product name and native Android/iOS identifiers. It builds
+and validates the complete change plan before writing, moves the Kotlin
+`MainActivity` to match its new package, and preserves target suffixes such as
+`.RunnerTests`.
+
+The command requires a clean Git working tree by default and offers a dry-run
+preview. It does not rename the internal Dart package `mobile`, edit signing
+configuration, or run automatically during generation or CI. Those boundaries
+keep one-time product setup separate from repeatable build automation.
+
+## 11. Generated code
+
+Injectable output and native launch-screen output are committed. Generator
+inputs are authoritative; generated files are never edited manually unless a
+documented product requirement has explicitly selected native ownership.
 
 ```bash
 dart run melos run generate
@@ -146,7 +195,7 @@ git diff --exit-code
 
 CI performs both commands before analysis and tests.
 
-## 10. Verification contract
+## 12. Verification contract
 
 Required source-level gates:
 

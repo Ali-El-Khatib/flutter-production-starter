@@ -1,0 +1,121 @@
+name: Bug report
+description: Report reproducible behavior that appears incorrect in the starter.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve the starter. Please provide a minimal, reproducible report.
+
+        **Do not report security vulnerabilities here.** Use the Security policy in the issue chooser.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Select the smallest area that owns the problem.
+      options:
+        - Mobile application or bootstrap
+        - Authentication feature
+        - Routing or dependency injection
+        - Networking
+        - Storage
+        - Design system or UI
+        - Melos, Pub Workspace, generation, or scripts
+        - CI or release build
+        - Documentation
+        - Unsure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - Android
+        - iOS
+        - Not platform-specific
+    validations:
+      required: true
+
+  - type: input
+    id: revision
+    attributes:
+      label: Repository revision
+      description: Provide the commit SHA, release tag, or branch and pull date.
+      placeholder: main at abc1234
+    validations:
+      required: true
+
+  - type: input
+    id: sdk
+    attributes:
+      label: Flutter and Dart versions
+      description: Paste the relevant first lines from `flutter --version`.
+      placeholder: Flutter 3.47.0, Dart ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: List the smallest sequence that consistently reproduces the problem.
+      placeholder: |
+        1. Clone the repository at ...
+        2. Run ...
+        3. Open ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Remove secrets and personal data, then paste only the concise output needed to diagnose the problem.
+      render: shell
+
+  - type: textarea
+    id: visual_evidence
+    attributes:
+      label: Screenshots or recordings
+      description: For visual problems, drag focused screenshots or a short recording here.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Include relevant local modifications, device details, or links to a minimal reproduction.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checklist
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: I reproduced this against the latest `main` branch or explained why I could not.
+          required: true
+        - label: I removed credentials, tokens, personal data, and other sensitive information.
+          required: true
+        - label: This is not a security vulnerability or Code of Conduct report.
+          required: true

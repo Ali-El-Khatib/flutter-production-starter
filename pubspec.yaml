@@ -17,6 +17,7 @@ workspace:
 dev_dependencies:
   app_lints: ^0.0.1
   melos: ^8.6.0
+  test: ^1.31.1
 
 melos:
   scripts:
@@ -29,16 +30,16 @@ melos:
       description: Check formatting across the workspace
 
     analyze:
-      run: dart analyze scripts && dart run melos exec -- dart analyze
-      description: Analyze root automation and every workspace package
+      run: dart analyze scripts test && dart run melos exec -- dart analyze
+      description: Analyze root tooling, its tests, and every workspace package
 
     test:
       run: dart run melos run test:dart && dart run melos run test:flutter
       description: Run every Dart and Flutter test
 
     test:dart:
-      run: dart run melos exec --dir-exists="test" --no-depends-on=flutter -- dart test
-      description: Run tests in pure Dart packages
+      run: dart test && dart run melos exec --dir-exists="test" --no-depends-on=flutter -- dart test
+      description: Run root tooling tests and tests in pure Dart packages
 
     test:flutter:
       run: dart run melos exec --concurrency=1 --dir-exists="test" --depends-on=flutter -- flutter test
@@ -53,8 +54,16 @@ melos:
       description: Enforce the mobile line-coverage non-regression floor
 
     generate:
-      run: dart run melos exec --concurrency=1 --depends-on=build_runner -- dart run build_runner build
-      description: Run build_runner code generation
+      run: dart run melos exec --concurrency=1 --depends-on=build_runner -- dart run build_runner build && dart run melos run splash:generate
+      description: Regenerate committed Dart and native splash files
+
+    splash:generate:
+      run: dart run melos exec --concurrency=1 --scope="mobile" -- dart run flutter_native_splash:create
+      description: Generate Android and iOS launch screens from the mobile splash configuration
+
+    configure:
+      run: dart run scripts/configure_app.dart
+      description: Configure the product name and Android/iOS application identifiers
 
     clean:
       run: dart run melos exec --concurrency=1 --depends-on=flutter -- flutter clean

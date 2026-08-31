@@ -1,0 +1,48 @@
+name: Documentation improvement
+description: Report missing, incorrect, or confusing repository guidance.
+title: "[Docs]: "
+body:
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Intended audience
+      options:
+        - Beginner Flutter developer
+        - Experienced Flutter developer
+        - Maintainer or contributor
+        - All users
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Documentation location
+      description: Link the file, heading, or page when possible.
+      placeholder: README.md#quick-start
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is unclear or incorrect?
+      description: Explain what you expected to learn and where the current guidance failed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Suggested improvement
+      description: Proposed wording, examples, or structure are welcome but not required.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checklist
+      options:
+        - label: I checked the README, beginner guide, contribution guide, and architecture guide for an existing answer.
+          required: true
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
