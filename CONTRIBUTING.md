@@ -44,7 +44,7 @@ dart run melos run test
 
 1. Fork the repo and create your branch from `main`.
 2. Ensure new features or packages have unit/widget tests.
-3. Run `melos run format` to ensure standard formatting.
+3. Run `dart run melos run format` to ensure standard formatting.
 4. Submit your Pull Request with a clear summary of changes.
 
 Generated source must be current. CI runs generation followed by

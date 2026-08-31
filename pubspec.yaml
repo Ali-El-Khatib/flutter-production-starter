@@ -29,23 +29,23 @@ melos:
       description: Check formatting across the workspace
 
     analyze:
-      run: dart analyze scripts && melos exec -- dart analyze
+      run: dart analyze scripts && dart run melos exec -- dart analyze
       description: Analyze root automation and every workspace package
 
     test:
-      run: melos run test:dart && melos run test:flutter
+      run: dart run melos run test:dart && dart run melos run test:flutter
       description: Run every Dart and Flutter test
 
     test:dart:
-      run: melos exec --dir-exists="test" --no-depends-on=flutter -- dart test
+      run: dart run melos exec --dir-exists="test" --no-depends-on=flutter -- dart test
       description: Run tests in pure Dart packages
 
     test:flutter:
-      run: melos exec --concurrency=1 --dir-exists="test" --depends-on=flutter -- flutter test
+      run: dart run melos exec --concurrency=1 --dir-exists="test" --depends-on=flutter -- flutter test
       description: Run Flutter tests serially to avoid SDK startup-lock contention
 
     coverage:mobile:
-      run: melos exec --scope="mobile" -- flutter test --coverage
+      run: dart run melos exec --scope="mobile" -- flutter test --coverage
       description: Generate mobile application coverage
 
     coverage:check:
@@ -53,27 +53,27 @@ melos:
       description: Enforce the mobile line-coverage non-regression floor
 
     generate:
-      run: melos exec --concurrency=1 --depends-on=build_runner -- dart run build_runner build
+      run: dart run melos exec --concurrency=1 --depends-on=build_runner -- dart run build_runner build
       description: Run build_runner code generation
 
     clean:
-      run: melos exec --concurrency=1 --depends-on=flutter -- flutter clean
+      run: dart run melos exec --concurrency=1 --depends-on=flutter -- flutter clean
       description: Clean Flutter build artifacts
 
     run:dev:
-      run: melos exec --scope="mobile" -- flutter run -t lib/main_development.dart
+      run: dart run melos exec --scope="mobile" -- flutter run -t lib/main_development.dart
       description: Run the mobile app in development mode
 
     run:staging:
-      run: melos exec --scope="mobile" -- flutter run -t lib/main_staging.dart
+      run: dart run melos exec --scope="mobile" -- flutter run -t lib/main_staging.dart
       description: Run the mobile app in staging mode
 
     run:prod:
-      run: melos exec --scope="mobile" -- flutter run -t lib/main_production.dart
+      run: dart run melos exec --scope="mobile" -- flutter run -t lib/main_production.dart
       description: Run the mobile app in production mode
 
     run:emulator:
-      run: melos exec --scope="mobile" -- flutter run -d emulator-5554 -t lib/main_development.dart
+      run: dart run melos exec --scope="mobile" -- flutter run -d emulator-5554 -t lib/main_development.dart
       description: Run the mobile app on the default Android emulator
 
     devices:
