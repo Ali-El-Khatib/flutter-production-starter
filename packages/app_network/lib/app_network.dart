@@ -1,5 +1,3 @@
-library app_network;
-
 // Dio
 export 'src/dio/dio_options.dart';
 export 'src/dio/dio_factory.dart';

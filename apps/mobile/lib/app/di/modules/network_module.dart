@@ -10,10 +10,15 @@ abstract class NetworkModule {
   NetworkErrorMapper get networkErrorMapper => const NetworkErrorMapper();
 
   @lazySingleton
-  Dio dio(AppConfig config, AppLogger logger) {
+  Dio dio(
+    AppConfig config,
+    AppLogger logger,
+    TokenProvider tokenProvider,
+  ) {
     return DioFactory.create(
       options: DioNetworkOptions(baseUrl: config.apiBaseUrl),
       logger: logger,
+      tokenProvider: tokenProvider,
       enableLogging: config.enableNetworkLogging,
       enableRetry: true,
     );

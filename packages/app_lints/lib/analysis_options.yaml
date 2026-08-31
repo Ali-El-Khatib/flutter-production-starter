@@ -1,3 +1,5 @@
+include: package:flutter_lints/flutter.yaml
+
 analyzer:
   language:
     strict-casts: true
@@ -6,7 +8,7 @@ analyzer:
   errors:
     missing_required_param: error
     missing_return: error
-    todo: ignore
+    todo: warning
     invalid_annotation_target: ignore
 
 linter:

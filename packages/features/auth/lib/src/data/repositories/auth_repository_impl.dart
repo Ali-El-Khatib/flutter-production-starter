@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:app_core/app_core.dart';
 import 'package:app_storage/app_storage.dart';
 import 'package:auth_contract/auth_contract.dart';
+import '../auth_storage_keys.dart';
 import '../datasources/auth_remote_data_source.dart';
 import '../models/user_dto.dart';
 
@@ -16,9 +17,6 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
   final SecureStorage _secureStorage;
 
-  static const String _tokenKey = 'auth_access_token';
-  static const String _userKey = 'auth_user_data';
-
   @override
   Future<Result<AuthSession>> login({
     required String email,
@@ -32,20 +30,54 @@ class AuthRepositoryImpl implements AuthRepository {
     return result.when(
       success: (data) async {
         try {
-          final token = data['token'] as String? ?? 'mock_token';
-          final userMap = data['user'] as Map<String, dynamic>? ?? {};
+          final token = data['token'];
+          final refreshToken = data['refresh_token'];
+          final userMap = data['user'];
+          if (token is! String ||
+              token.isEmpty ||
+              userMap is! Map<String, dynamic>) {
+            return const Result.failure(
+              DataContractFailure(
+                message: 'Authentication response is missing token or user',
+              ),
+            );
+          }
+
           final userDto = UserDto.fromJson(userMap);
+          if (userDto.id.isEmpty ||
+              userDto.email.isEmpty ||
+              userDto.name.isEmpty) {
+            return const Result.failure(
+              DataContractFailure(
+                message: 'Authentication user payload is incomplete',
+              ),
+            );
+          }
           final user = userDto.toDomain();
 
-          // Persist token and user in secure storage
-          await _secureStorage.write(_tokenKey, token);
-          await _secureStorage.write(_userKey, jsonEncode(userDto.toJson()));
+          await _secureStorage.write(AuthStorageKeys.accessToken, token);
+          if (refreshToken is String && refreshToken.isNotEmpty) {
+            await _secureStorage.write(
+              AuthStorageKeys.refreshToken,
+              refreshToken,
+            );
+          }
+          await _secureStorage.write(
+            AuthStorageKeys.userData,
+            jsonEncode(userDto.toJson()),
+          );
 
-          return Result.success(AuthSession(user: user, token: token));
+          return Result.success(
+            AuthSession(
+              user: user,
+              token: token,
+              refreshToken: refreshToken is String ? refreshToken : null,
+            ),
+          );
         } catch (e, st) {
           return Result.failure(
-            UnknownFailure(
-              message: 'Failed to process authentication payload',
+            CacheFailure(
+              message: 'Failed to persist authentication session',
               cause: e,
               stackTrace: st,
             ),
@@ -58,21 +90,40 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Result<void>> logout() async {
+    // Remote logout is best-effort; local credential removal is authoritative.
     await _remoteDataSource.logout();
-    await _secureStorage.delete(_tokenKey);
-    await _secureStorage.delete(_userKey);
-    return const Result.success(null);
+    try {
+      await _secureStorage.delete(AuthStorageKeys.accessToken);
+      await _secureStorage.delete(AuthStorageKeys.refreshToken);
+      await _secureStorage.delete(AuthStorageKeys.userData);
+      return const Result.success(null);
+    } catch (e, st) {
+      return Result.failure(
+        CacheFailure(
+          message: 'Failed to clear authentication session',
+          cause: e,
+          stackTrace: st,
+        ),
+      );
+    }
   }
 
   @override
   Future<Result<User?>> getCurrentUser() async {
     try {
-      final userJson = await _secureStorage.read(_userKey);
-      if (userJson != null && userJson.isNotEmpty) {
+      final token = await _secureStorage.read(AuthStorageKeys.accessToken);
+      final userJson = await _secureStorage.read(AuthStorageKeys.userData);
+      if (token != null &&
+          token.isNotEmpty &&
+          userJson != null &&
+          userJson.isNotEmpty) {
         final decoded = jsonDecode(userJson) as Map<String, dynamic>;
         final user = UserDto.fromJson(decoded).toDomain();
         return Result.success(user);
       }
+      await _secureStorage.delete(AuthStorageKeys.accessToken);
+      await _secureStorage.delete(AuthStorageKeys.refreshToken);
+      await _secureStorage.delete(AuthStorageKeys.userData);
       return const Result.success(null);
     } catch (e, st) {
       return Result.failure(

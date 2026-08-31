@@ -6,14 +6,13 @@ import 'package:mobile/app/di/injection.dart';
 void main() {
   testWidgets('App renders Home dashboard and navigates across modules',
       (tester) async {
-    // Configure DI for test environment
-    await configureDependencies(AppConfig.development());
+    await configureDependencies(AppConfig.test());
 
     await tester.pumpWidget(const App());
     await tester.pumpAndSettle();
 
     // Verify Home Page title and modules
-    expect(find.text('Flutter Starter (Dev)'), findsOneWidget);
+    expect(find.text('Flutter Starter (Test)'), findsOneWidget);
     expect(find.text('Explore Modules'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
     expect(find.text('Settings'), findsOneWidget);

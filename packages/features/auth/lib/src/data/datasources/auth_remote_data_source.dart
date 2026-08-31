@@ -26,46 +26,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    final result = await _apiClient.post<Map<String, dynamic>>(
+    return _apiClient.post<Map<String, dynamic>>(
       '/api/v1/auth/login',
       data: {'email': email, 'password': password},
       responseParser: (data) =>
           data is Map<String, dynamic> ? data : <String, dynamic>{},
-    );
-
-    return result.when(
-      success: (data) {
-        if (data.isEmpty) {
-          // Simulation fallback for starter project
-          return Result.success({
-            'token': 'jwt_mock_token_${DateTime.now().millisecondsSinceEpoch}',
-            'user': {
-              'id': 'usr_1',
-              'email': email,
-              'name': email.split('@').first,
-              'role': 'user',
-            },
-          });
-        }
-        return Result.success(data);
-      },
-      failure: (failure) {
-        // Provide mock success for simulated demo when endpoint not hosted
-        if (failure is ConnectivityFailure ||
-            failure is NotFoundFailure ||
-            failure is ServerFailure) {
-          return Result.success({
-            'token': 'jwt_mock_token_${DateTime.now().millisecondsSinceEpoch}',
-            'user': {
-              'id': 'usr_1',
-              'email': email,
-              'name': email.split('@').first,
-              'role': 'user',
-            },
-          });
-        }
-        return Result.failure(failure);
-      },
     );
   }
 

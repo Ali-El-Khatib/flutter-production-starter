@@ -30,9 +30,9 @@ void main() {
       await storage.setBool('onboarding_completed', true);
       await storage.setInt('launch_count', 5);
 
-      expect(storage.getString('theme'), equals('dark'));
-      expect(storage.getBool('onboarding_completed'), isTrue);
-      expect(storage.getInt('launch_count'), equals(5));
+      expect(await storage.getString('theme'), equals('dark'));
+      expect(await storage.getBool('onboarding_completed'), isTrue);
+      expect(await storage.getInt('launch_count'), equals(5));
     });
   });
 

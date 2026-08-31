@@ -5,14 +5,15 @@ publish_to: 'none'
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
-  flutter: ">=3.0.0"
+  flutter: ">=3.47.0"
 
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-  app_core: ^0.0.1
+  flutter_secure_storage: ^10.3.1
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:

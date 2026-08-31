@@ -1,1 +1,1 @@
-include: packages/app_lints/lib/analysis_options.yaml
+include: package:app_lints/analysis_options.yaml

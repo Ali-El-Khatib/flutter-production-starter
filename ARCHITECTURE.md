@@ -1,125 +1,164 @@
 # Architecture Guide
 
-This document details the architectural boundaries, principles, and conventions used across the Flutter Production Starter repository.
+## 1. Hybrid monorepo
 
----
-
-## 1. LEGO Module Boundaries
-
-Features are isolated business modules colocated in `apps/mobile/lib/features/`:
+The repository combines two complementary tools:
 
 ```text
-features/
-├── auth/
-│   ├── auth.dart                 # Public API (Contracts, Entities, Use Cases, Widgets)
-│   ├── data/                     # Datasources, models, DTO mappers, repo implementations
-│   ├── domain/                   # Entities, repository interfaces, use cases
-│   └── presentation/             # BLoC signals, pages, widgets
-├── profile/
-└── settings/
+Pub Workspaces                     Melos
+-------------------------------    --------------------------------
+dependency resolution              command orchestration
+native local package linking       generation, analysis, and tests
+one shared lockfile                app environment commands
+no path overrides                  CI-compatible workspace scripts
 ```
 
-### Boundary Rules
-- **Public API Exports Only**: Consumers import via `import 'package:mobile/features/auth/auth.dart';`.
-- **Never Deep Import**: Never import private internal paths of another feature (e.g. `../auth/data/...`).
-- **No Circular Dependencies**: Feature dependencies must be strictly unidirectional.
-- **Pluggability**: Features can be swapped via DI registration without touching other features.
+The root `pubspec.yaml` is the authoritative workspace inventory and contains
+the Melos 8 script catalog. Every member uses `resolution: workspace`, so Melos
+orchestrates the same native Pub workspace instead of creating path overrides.
 
----
+## 2. Feature placement
 
-## 2. Dependency Direction
+Features begin inside `apps/mobile/lib/features/`. Extract a feature only when
+there is evidence for independent ownership, reuse, lifecycle, or a stable
+contract.
+
+Current placement:
 
 ```text
-┌───────────────────────────────────────────────┐
-│               PRESENTATION                    │
-│      Pages • Widgets • BLoC Signals           │
-└───────────────────────┬───────────────────────┘
-                        │
-                        ▼
-┌───────────────────────────────────────────────┐
-│                 DOMAIN                        │
-│     Entities • Repository Interfaces • Cases  │
-└───────────────────────┬───────────────────────┘
-                        ▲
-                        │ (implements)
-┌───────────────────────┴───────────────────────┐
-│                  DATA                         │
-│  Repository Impls • Data Sources • DTO Mappers│
-└───────────────────────┬───────────────────────┘
-                        │
-                        ▼
-┌───────────────────────────────────────────────┐
-│            CENTRALIZED PACKAGES               │
-│    app_core • app_network • app_storage       │
-└───────────────────────────────────────────────┘
+apps/mobile/lib/features/
+├── home/                       # application dashboard composition
+├── profile/                    # app-owned profile capability
+└── settings/                   # app-owned user preferences
+
+packages/features/
+├── auth_contract/              # pure Dart public domain contract
+└── auth/                       # authentication implementation and UI
 ```
 
-- **Domain** is pure Dart and depends on nothing above or below it (except `app_core`).
-- **Data** implements domain interfaces and talks to infrastructure (`ApiClient`, `SecureStorage`).
-- **Presentation** talks to domain use cases or repository contracts, and consumes `design_system`.
-- **No Raw Leaks**: Dio exceptions, HTTP codes, and raw database errors never reach the Presentation layer.
+Authentication is one feature with one production implementation. Its contract
+is separate so consumers and tests depend on stable entities and repository
+behavior without importing data internals.
 
----
-
-## 3. Error Pipeline
+## 3. Dependency direction
 
 ```text
-Dio / Storage / Platform Error
-             ↓
-     typed AppException
-             ↓
-        ErrorMapper
-             ↓
-          Failure (Domain)
-             ↓
-         Result<T>
-             ↓
-    bloc_signals / Signal
-             ↓
-  FailureMessageResolver
-             ↓
-  Inline error / Toastification feedback
+Presentation -> use cases/contracts <- data -> shared infrastructure
 ```
 
-- **Diagnostic Branch**: Unexpected technical exceptions are logged via `AppLogger` with automatic token/credential sanitization.
-- **User Facing**: Friendly messages are resolved exclusively through `FailureMessageResolver`.
-- **Feedback Separation**: Toasts and snackbars stay in the Presentation layer using `AppFeedback` / `ToastificationFeedback`.
+- Presentation never handles Dio exceptions.
+- Domain contracts do not depend on Flutter UI.
+- Shared packages never depend on application features.
+- Cross-feature consumers use intentional public libraries.
+- DTOs, data sources, repository implementations, and storage keys remain
+  internal unless composition genuinely requires them.
 
----
-
-## 4. State Management with `bloc_signals`
-
-- Feature state resides in `feature/presentation/state/`.
-- State classes encapsulate immutable data.
-- Widgets observe signals with `SignalBuilder` or `Watch` without redundant global state.
-- Transient one-time effects (e.g. snackbars, toasts, dialogs) are handled via callbacks or state signals.
-
----
-
-## 5. Dependency Injection
-
-- Environments (`development`, `staging`, `production`) configure infrastructure parameters cleanly.
-
----
-
-## 6. Hybrid Monorepo: Pub Workspaces + Melos
-
-The monorepo employs a **Dart 3.6+ Pub Workspaces + Melos** hybrid model:
+The pure Dart base is:
 
 ```text
-                    HYBRID MONOREPO
-                           │
-              ┌────────────┴─────────────┐
-              │                          │
-         Pub Workspaces                Melos
-              │                          │
-     dependency resolution        command orchestration
-     native package linking       testing across packages
-     single shared lockfile       static analysis
-     zero path: overrides         code generation runner
-                                  environment execution & CI
+auth_contract -> app_core
+app_network   -> app_core
 ```
 
-- **Pub Workspaces** handles all package resolution and local linking natively without `path:` dependencies or overrides.
-- **Melos** acts as the automation and command orchestration engine for multi-package testing, analysis, formatting, and generation.
+Flutter-specific packages are `mobile`, `app_storage`, `design_system`, and
+`feature_auth`.
 
+## 4. Application composition
+
+`apps/mobile/lib/app/` owns:
+
+- environment configuration
+- GetIt/Injectable initialization
+- infrastructure adapters
+- environment-specific demo selection
+- bearer-token wiring
+- authenticated route guards
+- application routing and top-level widgets
+
+Feature packages expose a narrow registration function where feature-owned DI
+is clearer than placing every registration in generated application code.
+
+## 5. Environment boundary
+
+Development sample behavior is explicit composition, not error fallback:
+
+```text
+development -> DemoAuthRemoteDataSource + DemoProfileRepository
+staging     -> real ApiClient implementations
+production  -> real ApiClient implementations
+test        -> demo data + in-memory storage
+```
+
+Therefore a timeout, 404, or server error in staging/production remains a typed
+failure. It can never silently authenticate a user or fabricate profile data.
+
+## 6. Authentication and storage
+
+The application installs this path:
+
+```text
+FlutterSecureStorageAdapter
+        -> auth repository session persistence
+        -> TokenProvider
+        -> Dio AuthInterceptor
+```
+
+The router reads the application-wide `AuthBloc` state through
+`AuthRouteGuard`. Bootstrap restores auth and settings state before `runApp`.
+
+Sensitive values use `flutter_secure_storage`. Non-sensitive preferences use
+`SharedPreferencesAsync`. In-memory implementations are test-only and selected
+by `AppConfig.test()`.
+
+## 7. Error pipeline
+
+```text
+Dio / storage / payload error
+            -> stable Failure
+            -> Result<T>
+            -> feature state
+            -> FailureMessageResolver
+            -> inline UI / feedback
+```
+
+`DataContractFailure` identifies structurally invalid backend payloads without
+leaking raw data to users. Unexpected diagnostic context stays behind
+`AppLogger` sanitization.
+
+## 8. State management
+
+Feature state uses `bloc_signals`. State belongs to the feature that owns the
+behavior. Application-wide auth and settings state are shared intentionally;
+screen-scoped profile state remains factory-created.
+
+Persistence is explicit through storage contracts. Hydration is not installed
+until a concrete restorable-state use case justifies it.
+
+## 9. Generated code
+
+Injectable output is committed. Generator inputs are authoritative; generated
+files are never edited manually.
+
+```bash
+dart run melos run generate
+git diff --exit-code
+```
+
+CI performs both commands before analysis and tests.
+
+## 10. Verification contract
+
+Required source-level gates:
+
+```bash
+flutter pub get
+dart run melos run generate
+dart run melos run format:check
+dart run melos run analyze
+dart run melos run test
+dart run melos run coverage:mobile
+```
+
+CI additionally compiles the production entry point as a release APK. Store
+signing, backend integration, physical-device testing, and product-specific
+security review remain release responsibilities for the consuming application.

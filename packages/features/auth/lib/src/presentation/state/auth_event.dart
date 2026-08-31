@@ -1,8 +1,14 @@
+import 'dart:async';
+
 /// Base class for all authentication events.
 sealed class AuthEvent {}
 
 /// Check if a valid session exists in secure storage.
-class CheckAuthSessionEvent extends AuthEvent {}
+class CheckAuthSessionEvent extends AuthEvent {
+  CheckAuthSessionEvent(this.completer);
+
+  final Completer<void> completer;
+}
 
 /// User submitted the login form.
 class LoginSubmittedEvent extends AuthEvent {

@@ -5,15 +5,13 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
-  flutter: ">=3.0.0"
+  flutter: ">=3.47.0"
 
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.8
 
   # Architecture Shared Packages (Resolved natively via Pub Workspace)
   app_core: ^0.0.1
@@ -22,26 +20,21 @@ dependencies:
   design_system: ^0.0.1
   auth_contract: ^0.0.1
   feature_auth: ^0.0.1
-  feature_auth_v2: ^0.0.1
 
   # Routing
   kaisel: ^1.1.0
 
   # State Management
   bloc_signals: ^1.0.1
-  bloc_signals_flutter: ^1.2.0
-  bloc_signals_hydrate: ^1.0.1
+  signals_flutter: ^7.1.0
 
   # Models & DI
-  freezed_annotation: ^3.1.0
   get_it: ^9.2.1
   injectable: ^3.0.0
 
   # Networking & Utils
   dio: ^5.11.0
-  logger: ^2.7.0
   toastification: ^3.2.0
-  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -49,9 +42,8 @@ dev_dependencies:
 
   app_lints: ^0.0.1
 
-  build_runner: ^2.4.15
-  freezed: ^3.1.0
-  injectable_generator: ^3.0.0
+  build_runner: ^2.16.0
+  injectable_generator: ^3.1.3
 
 flutter:
   uses-material-design: true

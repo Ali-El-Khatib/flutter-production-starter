@@ -1,5 +1,5 @@
 import 'package:app_core/app_core.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('FailureMessageResolver', () {
@@ -33,6 +33,14 @@ void main() {
       const failure = UnknownFailure();
       expect(resolver.resolve(failure),
           equals('Something went wrong. Please try again.'));
+    });
+
+    test('resolves DataContractFailure without exposing payload details', () {
+      const failure = DataContractFailure(message: 'token was absent');
+      expect(
+        resolver.resolve(failure),
+        equals('The server returned unexpected data. Please try again later.'),
+      );
     });
   });
 }

@@ -32,28 +32,55 @@ class LoggerAppLogger implements AppLogger {
     });
   }
 
+  Object? _sanitizeError(Object? error) =>
+      error == null ? null : _sanitize(error.toString());
+
+  StackTrace? _sanitizeStackTrace(StackTrace? stackTrace) => stackTrace == null
+      ? null
+      : StackTrace.fromString(_sanitize(stackTrace.toString()));
+
   @override
   void debug(String message, [Object? error, StackTrace? stackTrace]) {
-    _logger.d(_sanitize(message), error: error, stackTrace: stackTrace);
+    _logger.d(
+      _sanitize(message),
+      error: _sanitizeError(error),
+      stackTrace: _sanitizeStackTrace(stackTrace),
+    );
   }
 
   @override
   void info(String message, [Object? error, StackTrace? stackTrace]) {
-    _logger.i(_sanitize(message), error: error, stackTrace: stackTrace);
+    _logger.i(
+      _sanitize(message),
+      error: _sanitizeError(error),
+      stackTrace: _sanitizeStackTrace(stackTrace),
+    );
   }
 
   @override
   void warning(String message, [Object? error, StackTrace? stackTrace]) {
-    _logger.w(_sanitize(message), error: error, stackTrace: stackTrace);
+    _logger.w(
+      _sanitize(message),
+      error: _sanitizeError(error),
+      stackTrace: _sanitizeStackTrace(stackTrace),
+    );
   }
 
   @override
   void error(String message, [Object? error, StackTrace? stackTrace]) {
-    _logger.e(_sanitize(message), error: error, stackTrace: stackTrace);
+    _logger.e(
+      _sanitize(message),
+      error: _sanitizeError(error),
+      stackTrace: _sanitizeStackTrace(stackTrace),
+    );
   }
 
   @override
   void fatal(String message, [Object? error, StackTrace? stackTrace]) {
-    _logger.f(_sanitize(message), error: error, stackTrace: stackTrace);
+    _logger.f(
+      _sanitize(message),
+      error: _sanitizeError(error),
+      stackTrace: _sanitizeStackTrace(stackTrace),
+    );
   }
 }

@@ -2,6 +2,8 @@ import 'package:app_network/app_network.dart';
 import 'package:app_storage/app_storage.dart';
 import 'package:auth_contract/auth_contract.dart';
 import 'package:get_it/get_it.dart';
+import '../data/auth_storage_keys.dart';
+import '../data/datasources/demo_auth_remote_data_source.dart';
 import '../data/datasources/auth_remote_data_source.dart';
 import '../data/repositories/auth_repository_impl.dart';
 import '../domain/usecases/get_current_user_use_case.dart';
@@ -10,10 +12,18 @@ import '../domain/usecases/logout_use_case.dart';
 import '../presentation/state/auth_bloc.dart';
 
 /// Registers all authentication feature dependencies into the shared application [GetIt] container.
-void registerAuthFeature(GetIt getIt) {
+void registerAuthFeature(GetIt getIt, {required bool enableDemoData}) {
+  if (!getIt.isRegistered<TokenProvider>()) {
+    getIt.registerLazySingleton<TokenProvider>(
+      () => () => getIt<SecureStorage>().read(AuthStorageKeys.accessToken),
+    );
+  }
+
   if (!getIt.isRegistered<AuthRemoteDataSource>()) {
     getIt.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(getIt<ApiClient>()),
+      () => enableDemoData
+          ? const DemoAuthRemoteDataSource()
+          : AuthRemoteDataSourceImpl(getIt<ApiClient>()),
     );
   }
 

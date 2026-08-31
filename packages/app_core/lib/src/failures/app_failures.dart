@@ -137,6 +137,16 @@ class CacheFailure extends Failure {
   });
 }
 
+/// Failure when an external payload does not satisfy its documented contract.
+class DataContractFailure extends Failure {
+  const DataContractFailure({
+    super.message = 'Received invalid data',
+    super.code = 'DATA_CONTRACT_ERROR',
+    super.cause,
+    super.stackTrace,
+  });
+}
+
 /// Failure when an operation was intentionally cancelled.
 class CancelledFailure extends Failure {
   const CancelledFailure({

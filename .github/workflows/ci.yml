@@ -1,5 +1,12 @@
 name: CI
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main, master, develop ]
@@ -10,6 +17,7 @@ jobs:
   validate:
     name: Code Quality & Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout Repository
@@ -18,11 +26,21 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.47.0'
           channel: 'stable'
           cache: true
 
       - name: Resolve Workspace Dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
+
+      - name: Bootstrap Melos Workspace
+        run: dart run melos bootstrap --enforce-lockfile
+
+      - name: Generate Source Files
+        run: dart run melos run generate
+
+      - name: Verify Generated Files Are Current
+        run: git diff --exit-code
 
       - name: Check Code Formatting
         run: dart run melos run format:check
@@ -32,3 +50,20 @@ jobs:
 
       - name: Run Tests
         run: dart run melos run test
+
+      - name: Generate Mobile Coverage
+        run: dart run melos run coverage:mobile
+
+      - name: Enforce Mobile Coverage Floor
+        run: dart run melos run coverage:check
+
+      - name: Upload Mobile Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-coverage
+          path: apps/mobile/coverage/lcov.info
+          if-no-files-found: error
+
+      - name: Build Production Entry Point
+        working-directory: apps/mobile
+        run: flutter build apk --release --target lib/main_production.dart

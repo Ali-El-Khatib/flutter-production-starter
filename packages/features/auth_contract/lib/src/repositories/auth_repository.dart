@@ -5,7 +5,7 @@ import '../entities/user.dart';
 /// Abstract domain contract defining authentication operations.
 ///
 /// Implemented by interchangeable auth feature implementations
-/// (e.g. `feature_auth`, `feature_auth_v2`).
+/// The application depends on this contract rather than data-layer details.
 abstract interface class AuthRepository {
   /// Authenticates a user with email and password.
   Future<Result<AuthSession>> login({

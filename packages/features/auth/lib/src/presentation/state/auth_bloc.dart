@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_signals/bloc_signals.dart';
 import '../../domain/usecases/get_current_user_use_case.dart';
 import '../../domain/usecases/login_use_case.dart';
@@ -42,6 +44,9 @@ class AuthBloc extends BlocSignal<AuthEvent, AuthState> {
           );
         },
       );
+      if (!event.completer.isCompleted) {
+        event.completer.complete();
+      }
     });
 
     on<LoginSubmittedEvent>((event, emit) async {
@@ -77,13 +82,18 @@ class AuthBloc extends BlocSignal<AuthEvent, AuthState> {
 
     on<LogoutSubmittedEvent>((event, emit) async {
       emit(state.value.copyWith(isLoading: true));
-      await _logoutUseCase();
-      emit(
-        const AuthState(
-          isAuthenticated: false,
-          isLoading: false,
-          user: null,
-          failure: null,
+      final result = await _logoutUseCase();
+      result.when(
+        success: (_) => emit(
+          const AuthState(
+            isAuthenticated: false,
+            isLoading: false,
+            user: null,
+            failure: null,
+          ),
+        ),
+        failure: (failure) => emit(
+          state.value.copyWith(isLoading: false, failure: failure),
         ),
       );
     });
@@ -93,7 +103,12 @@ class AuthBloc extends BlocSignal<AuthEvent, AuthState> {
   final LogoutUseCase _logoutUseCase;
   final GetCurrentUserUseCase _getCurrentUserUseCase;
 
-  void checkSession() => add(CheckAuthSessionEvent());
+  Future<void> checkSession() {
+    final completer = Completer<void>();
+    add(CheckAuthSessionEvent(completer));
+    return completer.future;
+  }
+
   void login({required String email, required String password}) =>
       add(LoginSubmittedEvent(email: email, password: password));
   void logout() => add(LogoutSubmittedEvent());

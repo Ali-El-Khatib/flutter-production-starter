@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 import 'user.dart';
 
 /// Domain model representing an active authenticated session.

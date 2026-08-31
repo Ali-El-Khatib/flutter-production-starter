@@ -1,13 +1,7 @@
-/// Authentication Feature Implementation.
-///
-/// Provides Clean Architecture data sources, repository implementations,
-/// use cases, BLoC Signals state, and UI presentation components.
-library feature_auth;
-
-// Data & Repository Implementations (for composition/testing)
-export 'src/data/datasources/auth_remote_data_source.dart';
-export 'src/data/repositories/auth_repository_impl.dart';
-
+// Authentication feature implementation.
+//
+// Provides use cases, BLoC Signals state, UI presentation components, and
+// explicit dependency-injection registration while keeping data internals private.
 // Use Cases
 export 'src/domain/usecases/get_current_user_use_case.dart';
 export 'src/domain/usecases/login_use_case.dart';

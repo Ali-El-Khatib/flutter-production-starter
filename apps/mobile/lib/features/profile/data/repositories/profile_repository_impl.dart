@@ -1,12 +1,10 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_network/app_network.dart';
-import 'package:injectable/injectable.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/profile_repository.dart';
 import '../models/user_profile_dto.dart';
 
 /// Implementation of [ProfileRepository] consuming [ApiClient].
-@LazySingleton(as: ProfileRepository)
 class ProfileRepositoryImpl implements ProfileRepository {
   const ProfileRepositoryImpl(this._apiClient);
 
@@ -22,38 +20,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
     return result.when(
       success: (data) {
-        if (data.isEmpty) {
-          return const Result.success(
-            UserProfile(
-              id: 'usr_1',
-              email: 'developer@example.com',
-              name: 'Senior Flutter Engineer',
-              role: 'Lead Architect',
-              bio:
-                  'Building production-grade modular architectures with Flutter and Dart.',
-            ),
+        final dto = UserProfileDto.fromJson(data);
+        if (dto.id.isEmpty || dto.email.isEmpty || dto.name.isEmpty) {
+          return const Result.failure(
+            DataContractFailure(message: 'Profile payload is incomplete'),
           );
         }
-        final dto = UserProfileDto.fromJson(data);
         return Result.success(dto.toDomain());
       },
-      failure: (failure) {
-        if (failure is ConnectivityFailure ||
-            failure is NotFoundFailure ||
-            failure is ServerFailure) {
-          return const Result.success(
-            UserProfile(
-              id: 'usr_1',
-              email: 'developer@example.com',
-              name: 'Senior Flutter Engineer',
-              role: 'Lead Architect',
-              bio:
-                  'Building production-grade modular architectures with Flutter and Dart.',
-            ),
-          );
-        }
-        return Result.failure(failure);
-      },
+      failure: Result.failure,
     );
   }
 
@@ -72,19 +47,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return result.when(
       success: (data) {
         final dto = UserProfileDto.fromJson(data);
+        if (dto.id.isEmpty || dto.email.isEmpty || dto.name.isEmpty) {
+          return const Result.failure(
+            DataContractFailure(
+                message: 'Updated profile payload is incomplete'),
+          );
+        }
         return Result.success(dto.toDomain());
       },
-      failure: (failure) {
-        return Result.success(
-          UserProfile(
-            id: 'usr_1',
-            email: 'developer@example.com',
-            name: name,
-            role: 'Lead Architect',
-            bio: bio,
-          ),
-        );
-      },
+      failure: Result.failure,
     );
   }
 }

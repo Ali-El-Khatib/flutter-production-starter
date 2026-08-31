@@ -1,5 +1,3 @@
-library app_storage;
-
 // Secure storage
 export 'src/secure/secure_storage.dart';
 

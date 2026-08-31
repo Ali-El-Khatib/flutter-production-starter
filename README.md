@@ -1,121 +1,67 @@
 # Flutter Production Starter Architecture
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Flutter](https://img.shields.io/badge/Flutter-3.14%2B-02569B?logo=flutter)](https://flutter.dev)
-[![Architecture: LEGO Monorepo](https://img.shields.io/badge/Architecture-Modular%20LEGO%20Clean-success)](./ARCHITECTURE.md)
-[![Melos](https://img.shields.io/badge/Maintained%20with-Melos-24292e.svg)](https://melos.invertase.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Flutter](https://img.shields.io/badge/Flutter-3.47.0-02569B?logo=flutter)](https://flutter.dev)
+[![Architecture](https://img.shields.io/badge/Architecture-Hybrid%20Monorepo-success)](ARCHITECTURE.md)
+[![CI](https://github.com/Ali-El-Khatib/flutter-production-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-El-Khatib/flutter-production-starter/actions/workflows/ci.yml)
 
-A scalable, production-oriented Flutter starter repository and architecture template designed for fast feature development, low coupling, high testability, and long-term maintainability.
+A production-oriented Flutter starter that combines Dart Pub Workspaces for
+native package resolution with Melos for repeatable workspace automation.
 
----
+New to Flutter architecture or monorepos? Start with
+[A Friendly Start for Beginners](Instructions_For_Beginners.md). You can run
+and modify the development app without understanding every package first.
 
-## 🚀 Architecture Highlights
+## Architecture
 
-- **Dart 3.6+ Pub Workspaces + Melos**: Native multi-package resolution with shared lockfile and zero `path:` overrides, combined with Melos task orchestration.
-- **Feature-First LEGO Modules**: Isolated business capabilities (`auth`, `profile`, `settings`, `home`) exposing intentional public APIs (`feature/feature.dart`).
-- **Pragmatic Clean Architecture**: Lightweight presentation where simple, structured data/domain contracts where complexity requires them.
-- **Declarative Routing**: Strongly-typed routing and route guards with [`kaisel: ^1.1.0`](https://pub.dev/packages/kaisel).
-- **Reactive State Management**: Fine-grained signals with `bloc_signals`, `bloc_signals_flutter`, and `signals_flutter`.
-- **Dependency Injection**: Constructor injection with `get_it` and `injectable`.
-- **Centralized Networking**: Centralized `dio` with automatic retry, bearer token management, sensitive log sanitization, and strongly typed `Result<T>` mapping.
-- **Predictable Error Pipeline**: Domain `Failure` taxonomy with `FailureMessageResolver` and presentation-layer `toastification: ^3.2.0`.
-- **Dedicated Design System**: Standalone `design_system` package with tokens (`Spacing`, `Radius`, `Durations`), theme definitions (`AppTheme`), and reusable UI primitives.
-- **LEGO Feature Replaceability**: Features can be replaced (e.g. `auth` ➔ `auth_v2`) via single-point DI binding without touching domain use cases, route guards, or UI callers. Read the [LEGO Features Guide](docs/architecture/lego_features.md).
+- **Pub Workspaces** provide native local linking and one shared lockfile.
+- **Melos** orchestrates formatting, generation, analysis, tests, coverage, and
+  application commands.
+- **Feature-first ownership** keeps small features inside the mobile app.
+- **Package extraction is selective**: authentication is packaged because it
+  has an independent contract, infrastructure, state, and UI boundary.
+- **Centralized infrastructure** owns Dio, secure storage, preferences, errors,
+  logging, and design primitives.
+- **Production-safe composition** installs bearer-token injection, authenticated
+  route guards, platform secure storage, and durable preferences.
+- **Honest demo behavior** is selected only by development configuration; failed
+  staging and production requests remain failures.
 
----
+See [ARCHITECTURE.md](ARCHITECTURE.md) and the
+[feature packaging guide](docs/architecture/lego_features.md).
 
-## 📁 Repository Structure
+## Workspace layout
 
 ```text
 /
-├── apps/
-│   └── mobile/                # Main Flutter application (Bootstrap, DI, Routes, In-App Features)
-│       └── lib/
-│           ├── app/           # App root, bootstrap, DI, routes & guards
-│           └── features/      # App-level features (home, profile, settings)
+├── apps/mobile/                    # Flutter application and in-app features
 ├── packages/
-│   ├── app_core/              # Stable primitives (Result<T>, Failures, Exceptions, AppLogger)
-│   ├── app_network/           # Centralized Dio, interceptors, error mappers, ApiClient
-│   ├── app_storage/           # Storage contracts (SecureStorage, KeyValueStorage, MemoryCache)
-│   ├── design_system/         # Tokens, theme, buttons, text fields, loaders, error states
-│   ├── app_lints/             # Shared strict analysis and linting configuration
-│   └── features/              # Package-Level LEGO Bricks
-│       ├── auth_contract/     # Pure contract (User, AuthSession, AuthRepository)
-│       ├── auth/              # Production auth implementation (Clean Architecture, BLoC Signals, Dio)
-│       └── auth_v2/           # Alternative auth implementation (Zero coupling to auth, pure contract swap)
-├── melos.yaml                 # Monorepo task runner configuration
-├── pubspec.yaml               # Root Pub Workspace configuration
-├── ARCHITECTURE.md            # In-depth architectural rules and conventions
-├── CHANGELOG.md               # Version history and release notes
-└── LICENSE                    # Open Source MIT License
+│   ├── app_core/                   # Pure Dart result, failure, and logging APIs
+│   ├── app_lints/                  # Shared strict analyzer configuration
+│   ├── app_network/                # Pure Dart Dio infrastructure
+│   ├── app_storage/                # Secure storage, preferences, and memory cache
+│   ├── design_system/              # Flutter tokens, themes, and UI primitives
+│   └── features/
+│       ├── auth_contract/          # Pure Dart auth entities and repository contract
+│       └── auth/                   # Auth data, use cases, state, UI, and DI
+├── .github/workflows/ci.yml
+├── pubspec.yaml                     # Pub workspace and Melos 8 configuration
+└── pubspec.lock
 ```
 
----
+Melos orchestrates eight members: the mobile application and seven packages.
+`dart pub workspace list` also reports the root configuration package, which
+owns the shared lockfile and Melos script catalog.
 
-## 🛠️ Quick Start
+## Requirements
 
-### 1. Prerequisites
-- Dart SDK `^3.6.0` / Flutter SDK `^3.27.0` (or higher)
+- Flutter `3.47.0`
+- Dart version bundled with Flutter `3.47.0`
+- Android API 23 or newer
 
-### 2. Resolve Workspace Dependencies
-Pub Workspaces natively links all workspace members with a single shared lockfile:
-```bash
-flutter pub get
-```
+CI pins Flutter `3.47.0`. Use the same SDK locally for reproducible results.
 
-### 3. Run the Mobile App
-Run in any configured environment (`development`, `staging`, `production`):
-```bash
-# Development (default)
-dart run melos run run:dev
-
-# Staging
-dart run melos run run:staging
-
-# Production
-dart run melos run run:prod
-
-# Directly on connected emulator
-dart run melos run run:emulator
-```
-
----
-
-## 📜 Monorepo Workspace Commands
-
-Melos is pinned as a root dev dependency (`^6.0.0`) and is executed via `dart run melos`:
-
-| Command | Action |
-|---|---|
-| `flutter pub get` | Resolve workspace dependencies natively across all packages |
-| `dart run melos run format` | Format Dart code across the monorepo |
-| `dart run melos run format:check` | Verify code formatting in CI |
-| `dart run melos run analyze` | Run `flutter analyze` across all 6 packages |
-| `dart run melos run test` | Run all test suites across all packages |
-| `dart run melos run generate` | Run `build_runner` code generation (`injectable`, `freezed`) |
-| `dart run melos run clean` | Clean all Flutter build outputs |
-| `dart run melos run run:dev` | Run mobile app in development mode |
-| `dart run melos run run:staging` | Run mobile app in staging mode |
-| `dart run melos run run:prod` | Run mobile app in production mode |
-| `dart run melos run run:emulator` | Run mobile app directly on active emulator (`emulator-5554`) |
-| `dart run melos run devices` | List all connected devices |
-| `dart run melos run emulators` | List all available emulators |
-| `dart run melos run emulators:launch` | Launch Pixel 7 emulator |
-
----
-
-## 🧩 Reference Features
-
-1. **Settings** (`features/settings/`): Simple feature showcasing state without unnecessary data/domain ceremony.
-2. **Profile** (`features/profile/`): Medium feature showcasing repository contracts, DTO mapping, and Dio communication.
-3. **Authentication (Auth V1)** (`features/auth/`): Complete clean architecture demonstrating datasources, use cases, secure token persistence, and route guard integration.
-4. **Auth V2 (LEGO Pluggability)** (`features/auth_v2/`): Proves interchangeable implementation behind the same contracts via DI.
-
----
-
-## 🧪 Testing & Verification
-
-Run the full verification suite across the entire repository:
+## Quick start
 
 ```bash
 flutter pub get
@@ -123,25 +69,66 @@ dart run melos run generate
 dart run melos run format:check
 dart run melos run analyze
 dart run melos run test
+dart run melos run run:dev
 ```
 
----
+Development uses explicit sample adapters so the starter can be explored
+without a backend. Staging and production use the configured APIs and never
+convert transport/server failures into sample success data.
 
-## 🤝 Contributing
+Replace the reserved example base URLs in
+`apps/mobile/lib/app/config/app_config.dart` before connecting a backend.
 
-Contributions are welcome! Please ensure:
-1. All changes adhere to [ARCHITECTURE.md](./ARCHITECTURE.md) and [AGENTS.md](./AGENTS.md).
-2. All packages pass `dart run melos run format:check`, `dart run melos run analyze`, and `dart run melos run test`.
-3. New features export their public API via a root barrel file.
+## Workspace commands
 
----
+| Command | Purpose |
+|---|---|
+| `flutter pub get --enforce-lockfile` | Resolve the native Pub Workspace reproducibly |
+| `dart run melos bootstrap --enforce-lockfile` | Verify Melos sees and bootstraps all members |
+| `dart run melos run generate` | Regenerate committed source files |
+| `dart run melos run format:check` | Verify formatting |
+| `dart run melos run analyze` | Analyze all members with Dart analyzer |
+| `dart run melos run test` | Run pure Dart and Flutter suites correctly |
+| `dart run melos run coverage:mobile` | Generate mobile LCOV coverage |
+| `dart run melos run coverage:check` | Enforce the 60% mobile line-coverage floor |
+| `dart run melos run run:dev` | Run the development entry point |
+| `dart run melos run run:staging` | Run the staging entry point |
+| `dart run melos run run:prod` | Run the production entry point |
 
-## 👤 Author
+Flutter test processes run serially because the Flutter SDK uses a global
+startup lock on Windows. Pure Dart analysis and tests remain parallelizable.
 
-Created and maintained by **Ali El-Khatib**.
+## Environment behavior
 
----
+| Environment | Demo data | Storage | Network logging |
+|---|---:|---|---:|
+| Development | Yes, explicit adapters | Platform-backed | On |
+| Staging | No | Platform-backed | On |
+| Production | No | Platform-backed | Off |
+| Test | Yes | In-memory fakes | Off |
 
-## 📄 License
+Tokens are stored through `flutter_secure_storage`; preferences use the modern
+asynchronous `shared_preferences` API. Both adapters namespace owned keys.
 
-This project is licensed under the MIT License by Ali El-Khatib — see the [LICENSE](./LICENSE) file for details.
+## Release preparation
+
+The starter deliberately does not commit release signing credentials. Before
+shipping an application:
+
+1. Replace `com.yourcompany.mobile` with the product application ID.
+2. Configure Android and iOS signing through local/CI secrets.
+3. Replace the example API URLs.
+4. Run the complete verification suite and a signed release build.
+5. Perform device, accessibility, security, and backend integration testing.
+
+## Contributing
+
+If this is your first contribution, begin with
+[Instructions_For_Beginners.md](Instructions_For_Beginners.md). Then read
+[CONTRIBUTING.md](CONTRIBUTING.md), [ARCHITECTURE.md](ARCHITECTURE.md), and
+[AGENTS.md](AGENTS.md). Pull requests must keep generated code current and pass
+the same checks as CI.
+
+## License
+
+MIT License. See [LICENSE](LICENSE).

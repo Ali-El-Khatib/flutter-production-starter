@@ -13,7 +13,77 @@ workspace:
   - packages/design_system
   - packages/features/auth_contract
   - packages/features/auth
-  - packages/features/auth_v2
 
 dev_dependencies:
-  melos: ^6.0.0
+  app_lints: ^0.0.1
+  melos: ^8.6.0
+
+melos:
+  scripts:
+    format:
+      run: dart format .
+      description: Format all Dart files in the workspace
+
+    format:check:
+      run: dart format --output=none --set-exit-if-changed .
+      description: Check formatting across the workspace
+
+    analyze:
+      run: dart analyze scripts && melos exec -- dart analyze
+      description: Analyze root automation and every workspace package
+
+    test:
+      run: melos run test:dart && melos run test:flutter
+      description: Run every Dart and Flutter test
+
+    test:dart:
+      run: melos exec --dir-exists="test" --no-depends-on=flutter -- dart test
+      description: Run tests in pure Dart packages
+
+    test:flutter:
+      run: melos exec --concurrency=1 --dir-exists="test" --depends-on=flutter -- flutter test
+      description: Run Flutter tests serially to avoid SDK startup-lock contention
+
+    coverage:mobile:
+      run: melos exec --scope="mobile" -- flutter test --coverage
+      description: Generate mobile application coverage
+
+    coverage:check:
+      run: dart run scripts/check_coverage.dart apps/mobile/coverage/lcov.info 60
+      description: Enforce the mobile line-coverage non-regression floor
+
+    generate:
+      run: melos exec --concurrency=1 --depends-on=build_runner -- dart run build_runner build
+      description: Run build_runner code generation
+
+    clean:
+      run: melos exec --concurrency=1 --depends-on=flutter -- flutter clean
+      description: Clean Flutter build artifacts
+
+    run:dev:
+      run: melos exec --scope="mobile" -- flutter run -t lib/main_development.dart
+      description: Run the mobile app in development mode
+
+    run:staging:
+      run: melos exec --scope="mobile" -- flutter run -t lib/main_staging.dart
+      description: Run the mobile app in staging mode
+
+    run:prod:
+      run: melos exec --scope="mobile" -- flutter run -t lib/main_production.dart
+      description: Run the mobile app in production mode
+
+    run:emulator:
+      run: melos exec --scope="mobile" -- flutter run -d emulator-5554 -t lib/main_development.dart
+      description: Run the mobile app on the default Android emulator
+
+    devices:
+      run: flutter devices
+      description: List connected Flutter devices
+
+    emulators:
+      run: flutter emulators
+      description: List available Flutter emulators
+
+    emulators:launch:
+      run: flutter emulators --launch Pixel_7_API_34
+      description: Launch the default Pixel emulator

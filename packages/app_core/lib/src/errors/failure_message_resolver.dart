@@ -54,6 +54,10 @@ class FailureMessageResolver {
       return 'Unable to load local data. Please try again.';
     }
 
+    if (failure is DataContractFailure) {
+      return 'The server returned unexpected data. Please try again later.';
+    }
+
     if (failure is CancelledFailure) {
       return 'The operation was cancelled.';
     }

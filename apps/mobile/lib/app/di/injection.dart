@@ -1,3 +1,4 @@
+import 'package:app_network/app_network.dart';
 import 'package:feature_auth/feature_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
@@ -10,6 +11,7 @@ final GetIt getIt = GetIt.instance;
   initializerName: 'init',
   preferRelativeImports: true,
   asExtension: true,
+  ignoreUnregisteredTypes: [AppConfig, AuthBloc, TokenProvider],
 )
 Future<void> configureDependencies(AppConfig config) async {
   if (getIt.isRegistered<AppConfig>()) {
@@ -19,5 +21,5 @@ Future<void> configureDependencies(AppConfig config) async {
   getIt.init(environment: config.environment.name);
 
   // Register Package-Level LEGO Bricks
-  registerAuthFeature(getIt);
+  registerAuthFeature(getIt, enableDemoData: config.enableDemoData);
 }

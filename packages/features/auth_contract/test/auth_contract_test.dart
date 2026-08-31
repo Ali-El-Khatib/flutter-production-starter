@@ -1,5 +1,5 @@
 import 'package:auth_contract/auth_contract.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('AuthContract Entities', () {

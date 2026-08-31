@@ -1,68 +1,39 @@
-# Mobile Application (`apps/mobile`)
+# Mobile Application
 
-The main Flutter client application for the starter architecture monorepo.
-
----
-
-## 🏗️ Structure
+The mobile workspace member owns application bootstrap, environment selection,
+DI composition, routing, and app-specific features.
 
 ```text
 lib/
-├── app/                      # Application Bootstrap, Config, DI, Router, Feedback
-│   ├── bootstrap.dart
-│   ├── app.dart
-│   ├── config/               # AppEnvironment & AppConfig
-│   ├── di/                   # GetIt & Injectable modules
-│   ├── feedback/             # Toastification presentation feedback
-│   └── router/               # Kaisel Router & Route Guards
-├── features/                 # LEGO Modular Features
-│   ├── auth/                 # Complex Clean Architecture Feature (UseCases, Repos, State)
-│   ├── auth_v2/              # Pluggability Proof Feature (DI Substitution)
-│   ├── home/                 # Application Dashboard
-│   ├── profile/              # Medium Feature (Repository + DTO Mapping)
-│   └── settings/             # Simple Feature (State & Preferences)
-├── main.dart                 # Default entrypoint
-├── main_development.dart     # Development environment entrypoint
-├── main_staging.dart         # Staging environment entrypoint
-└── main_production.dart      # Production environment entrypoint
+├── app/
+│   ├── config/                 # development, staging, production, test
+│   ├── di/                     # generated and manual composition
+│   ├── feedback/               # presentation feedback implementation
+│   └── router/                 # typed routes and authenticated guards
+├── features/
+│   ├── home/
+│   ├── profile/
+│   └── settings/
+├── main_development.dart
+├── main_staging.dart
+└── main_production.dart
 ```
 
----
+Authentication is consumed from `package:feature_auth`; stable entities and the
+repository contract come from `package:auth_contract`.
 
-## 🚀 Running the App
+## Run
 
-### By Environment
-```bash
-# Development (default)
-flutter run -t lib/main_development.dart
-
-# Staging
-flutter run -t lib/main_staging.dart
-
-# Production
-flutter run -t lib/main_production.dart
-```
-
-### Targeting Specific Devices
-```bash
-flutter devices
-flutter run -d <device_id> -t lib/main_development.dart
-```
-
----
-
-## 🛠️ Code Generation
-
-Generate Dependency Injection and Freezed models:
+From the repository root:
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run melos run run:dev
+dart run melos run run:staging
+dart run melos run run:prod
 ```
 
----
+Development explicitly enables sample adapters. Staging and production use real
+API repositories and propagate backend failures honestly.
 
-## 🧪 Testing
-
-```bash
-flutter test
-```
+Before release, replace the example application ID and API URL and configure
+signing through local or CI secrets.

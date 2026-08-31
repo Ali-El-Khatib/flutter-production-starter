@@ -1,6 +1,10 @@
 # Contributing to Flutter Starter Architecture
 
-Thank you for your interest in contributing! This project is maintained by **Ali El-Khatib** as a reusable, production-ready Flutter starter architecture.
+Thank you for contributing to this production-oriented Flutter starter architecture.
+
+If this is your first Flutter monorepo contribution, please start with
+[A Friendly Start for Beginners](./Instructions_For_Beginners.md). You are not
+expected to understand every package before making a focused change.
 
 ---
 
@@ -42,3 +46,6 @@ dart run melos run test
 2. Ensure new features or packages have unit/widget tests.
 3. Run `melos run format` to ensure standard formatting.
 4. Submit your Pull Request with a clear summary of changes.
+
+Generated source must be current. CI runs generation followed by
+`git diff --exit-code`, so generator inputs and committed output cannot drift.

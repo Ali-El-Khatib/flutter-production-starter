@@ -1,5 +1,3 @@
-library app_core;
-
 // Results
 export 'src/result/result.dart';
 
@@ -17,3 +15,4 @@ export 'src/errors/failure_message_resolver.dart';
 // Logging
 export 'src/logging/app_logger.dart';
 export 'src/logging/logger_app_logger.dart';
+export 'src/logging/noop_app_logger.dart';

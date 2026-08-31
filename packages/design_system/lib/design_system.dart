@@ -1,5 +1,3 @@
-library design_system;
-
 // Tokens
 export 'src/tokens/spacing.dart';
 export 'src/tokens/radius.dart';
