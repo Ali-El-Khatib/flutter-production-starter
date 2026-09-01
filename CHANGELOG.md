@@ -36,6 +36,8 @@ and semantic versioning.
 - Melos 8 configuration now lives in the root Pub workspace manifest, removing
   legacy `pubspec_overrides.yaml` generation.
 - Flutter is pinned to `3.47.0` in CI.
+- GitHub checkout and artifact-upload actions now use their Node 24-compatible
+  `v7` releases.
 - Root analysis and pure-Dart test commands now include first-party repository
   tooling.
 - Workspace generation now refreshes both Injectable output and native splash
