@@ -10,7 +10,7 @@
 
 <!-- List the exact commands and manual checks you ran. Never claim checks that were not run. -->
 
-- [ ] `dart run melos run generate`
+- [ ] `dart run melos run generate:all`
 - [ ] `dart run melos run format:check`
 - [ ] `dart run melos run analyze`
 - [ ] `dart run melos run test`

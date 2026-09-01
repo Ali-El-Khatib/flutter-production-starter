@@ -153,7 +153,7 @@ checklist gradually:
    `apps/mobile/lib/app/config/app_config.dart`.
 4. Add product splash artwork under `apps/mobile/assets/app/branding/`, update
    `apps/mobile/flutter_native_splash.yaml`, and run
-   `dart run melos run generate`.
+   `dart run melos run splash:generate`.
 5. Connect one development API flow before connecting every feature.
 6. Keep the demo implementations available only in development and test.
 7. Remove sample features only after you understand whether they provide a
@@ -219,7 +219,7 @@ implementation and select it through configuration.
 Run the same core checks used by CI:
 
 ```bash
-dart run melos run generate
+dart run melos run generate:all
 dart run melos run format:check
 dart run melos run analyze
 dart run melos run test
@@ -265,6 +265,9 @@ dart run melos run generate
 ```
 
 If it still fails, include the full generator message when asking for help.
+This command handles Dart source generation only. If you changed
+`flutter_native_splash.yaml` or splash artwork, run
+`dart run melos run splash:generate` separately.
 
 ### A test cannot use secure storage or preferences
 

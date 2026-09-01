@@ -40,8 +40,8 @@ and semantic versioning.
   `v7` releases.
 - Root analysis and pure-Dart test commands now include first-party repository
   tooling.
-- Workspace generation now refreshes both Injectable output and native splash
-  resources from their authoritative configuration.
+- Dart source generation and native splash generation now use separate Melos
+  commands, with `generate:all` reserved for complete CI drift verification.
 - Beginner, contribution, architecture, and release guidance now cover product
   identity setup, asset ownership, native splash customization, and private
   vulnerability reporting.

@@ -184,12 +184,21 @@ keep one-time product setup separate from repeatable build automation.
 
 ## 11. Generated code
 
-Injectable output and native launch-screen output are committed. Generator
-inputs are authoritative; generated files are never edited manually unless a
-documented product requirement has explicitly selected native ownership.
+Injectable output and native launch-screen output are committed. Their commands
+are intentionally separate: ordinary Dart generation must not rewrite native
+launch resources when no splash input changed. Generator inputs are
+authoritative; generated files are never edited manually unless a documented
+product requirement has explicitly selected native ownership.
 
 ```bash
 dart run melos run generate
+dart run melos run splash:generate
+```
+
+CI verifies every committed artifact through the combined convenience script:
+
+```bash
+dart run melos run generate:all
 git diff --exit-code
 ```
 
@@ -201,7 +210,7 @@ Required source-level gates:
 
 ```bash
 flutter pub get
-dart run melos run generate
+dart run melos run generate:all
 dart run melos run format:check
 dart run melos run analyze
 dart run melos run test

@@ -35,9 +35,17 @@ flutter pub get
 dart run melos run generate
 ```
 
+Native splash generation is intentionally separate. Run it only after changing
+`apps/mobile/flutter_native_splash.yaml` or its artwork:
+
+```bash
+dart run melos run splash:generate
+```
+
 ### 3. Verification Gates
 Before submitting a PR, ensure all checks pass:
 ```bash
+dart run melos run generate:all
 dart run melos run format:check
 dart run melos run analyze
 dart run melos run test
@@ -56,5 +64,5 @@ Use the repository's issue forms before starting substantial work. A focused
 issue lets maintainers confirm scope and architectural fit before you invest
 time in an implementation.
 
-Generated source must be current. CI runs generation followed by
+Generated artifacts must be current. CI runs `generate:all` followed by
 `git diff --exit-code`, so generator inputs and committed output cannot drift.

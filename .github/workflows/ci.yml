@@ -36,8 +36,8 @@ jobs:
       - name: Bootstrap Melos Workspace
         run: dart run melos bootstrap --enforce-lockfile
 
-      - name: Generate Source Files
-        run: dart run melos run generate
+      - name: Generate Committed Artifacts
+        run: dart run melos run generate:all
 
       - name: Verify Generated Files Are Current
         run: git diff --exit-code

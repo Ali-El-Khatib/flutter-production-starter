@@ -103,8 +103,9 @@ Replace the reserved example base URLs in
 | `flutter pub get --enforce-lockfile` | Resolve the native Pub Workspace reproducibly |
 | `dart run melos bootstrap --enforce-lockfile` | Verify Melos sees and bootstraps all members |
 | `dart run melos run configure` | Interactively configure the product name and native application identifiers |
-| `dart run melos run generate` | Regenerate committed Dart and native splash files |
+| `dart run melos run generate` | Regenerate committed Dart source files with Build Runner |
 | `dart run melos run splash:generate` | Regenerate Android and iOS launch screens only |
+| `dart run melos run generate:all` | Regenerate all committed Dart and native splash artifacts (used by CI) |
 | `dart run melos run format:check` | Verify formatting |
 | `dart run melos run analyze` | Analyze all members with Dart analyzer |
 | `dart run melos run test` | Run pure Dart and Flutter suites correctly |

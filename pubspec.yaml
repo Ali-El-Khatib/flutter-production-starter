@@ -54,12 +54,16 @@ melos:
       description: Enforce the mobile line-coverage non-regression floor
 
     generate:
-      run: dart run melos exec --concurrency=1 --depends-on=build_runner -- dart run build_runner build && dart run melos run splash:generate
-      description: Regenerate committed Dart and native splash files
+      run: dart run melos exec --concurrency=1 --depends-on=build_runner -- dart run build_runner build
+      description: Regenerate committed Dart source files
 
     splash:generate:
       run: dart run melos exec --concurrency=1 --scope="mobile" -- dart run flutter_native_splash:create
       description: Generate Android and iOS launch screens from the mobile splash configuration
+
+    generate:all:
+      run: dart run melos run generate && dart run melos run splash:generate
+      description: Regenerate all committed Dart and native splash artifacts
 
     configure:
       run: dart run scripts/configure_app.dart

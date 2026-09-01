@@ -40,7 +40,6 @@ void main(List<String> arguments) {
     stdout
       ..writeln('\nApplication identity configured successfully.')
       ..writeln('Next:')
-      ..writeln('  dart run melos run generate')
       ..writeln('  dart run melos run analyze')
       ..writeln('  dart run melos run test');
   } on FormatException catch (error) {
